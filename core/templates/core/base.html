@@ -1,0 +1,131 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RemDesk | Hire Top 5% Remote Talent from India</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="RemDesk helps global companies hire verified, skilled remote talent from India. Save up to 70% costs with our pre-vetted professionals.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <a href="{% url 'index' %}" class="logo">Rem<span>Desk</span></a>
+                <ul class="nav-links">
+                    <li><a href="{% url 'employers' %}">For Employers</a></li>
+                    <li><a href="{% url 'careers' %}">Find Jobs</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="#" class="btn btn-outline js-open-auth">Login</a>
+                    <a href="{% url 'employers' %}" class="btn btn-primary">Hire Talent</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    {% if messages %}
+    <div class="container mt-2"
+        style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 90%; max-width: 600px;">
+        {% for message in messages %}
+        <div class="glass-card"
+            style="padding: 1rem; border: 1px solid var(--primary); background: rgba(16, 185, 129, 0.1); margin-bottom: 1rem;">
+            <p class="text-center mb-0" style="color: white;">{{ message }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; {% now "Y" %} RemDesk. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-glass">
+            <button class="modal-close">&times;</button>
+            <div class="modal-content">
+                <h2 class="text-center mb-2">Welcome to RemDesk</h2>
+                <p class="text-center text-secondary mb-2">Join the future of global work.</p>
+
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Login</button>
+                    <button class="auth-tab" data-tab="signup">Sign Up</button>
+                </div>
+
+                <div class="social-buttons">
+                    <a href="{% provider_login_url 'google' %}" class="btn-social google">
+                        <i class="fab fa-google"></i> Continue with Google
+                    </a>
+                    <a href="#" class="btn-social twitter">
+                        <i class="fab fa-x-twitter"></i> Continue with X
+                    </a>
+                </div>
+
+                <div class="divider"><span>Or continue with email</span></div>
+
+                <form class="auth-form" id="login-form">
+                    <div class="form-group">
+                        <input type="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Log In</button>
+                </form>
+
+                <form class="auth-form hidden" id="signup-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal-overlay">
+        <!-- ... modal content ... -->
+    </div>
+
+    <!-- 3D Background Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Three.js Module -->
+    <script type="module" src="{% static 'core/js/space_background.js' %}"></script>
+    <script src="{% static 'core/js/main.js' %}"></script>
+</body>
+
+</html>

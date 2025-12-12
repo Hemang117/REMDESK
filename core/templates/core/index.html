@@ -1,0 +1,81 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+
+<!-- Hero Section -->
+<section class="hero" style="min-height: 90vh; display: flex; align-items: center;">
+    <div class="container text-center flex-column items-center">
+        <h1 class="mb-2">The Future of Global Hiring <br>Starts in India.</h1>
+        <p class="mb-2" style="font-size: 1.25rem;">
+            RemDesk connects world-class startups with the top 5% of Indian talent.
+            Pre-vetted, compliant, and ready to deploy in 3 days.
+        </p>
+        <div class="nav-actions gap-2">
+            <a href="{% url 'employers' %}" class="btn btn-primary"
+                style="padding: 1rem 2.5rem; font-size: 1.1rem;">Start Hiring</a>
+            <a href="{% url 'careers' %}" class="btn btn-secondary"
+                style="padding: 1rem 2.5rem; font-size: 1.1rem;">Join as Talent</a>
+        </div>
+
+        <div class="mt-5" style="display: flex; gap: 4rem; opacity: 0.7;">
+            <div>
+                <h3 style="margin:0; font-size: 2.5rem; color:white;">5M+</h3>
+                <span style="font-size: 0.9rem;">Professionals</span>
+            </div>
+            <div>
+                <h3 style="margin:0; font-size: 2.5rem; color:white;">70%</h3>
+                <span style="font-size: 0.9rem;">Cost Savings</span>
+            </div>
+            <div>
+                <h3 style="margin:0; font-size: 2.5rem; color:white;">48h</h3>
+                <span style="font-size: 0.9rem;">Placement Speed</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Value Prop (Problem/Solution) -->
+<section>
+    <div class="container">
+        <div class="bento-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="glass-card">
+                <h2 class="text-gradient">The Old Way</h2>
+                <ul style="list-style: none; margin-top: 1rem;">
+                    <li style="margin-bottom: 1rem; color: #f87171;">✖ Fragmented hiring across platforms</li>
+                    <li style="margin-bottom: 1rem; color: #f87171;">✖ Unreliable verification & skills</li>
+                    <li style="margin-bottom: 1rem; color: #f87171;">✖ Compliance nightmares</li>
+                </ul>
+            </div>
+            <div class="glass-card" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
+                <h2 class="text-gradient">The RemDesk Way</h2>
+                <ul style="list-style: none; margin-top: 1rem;">
+                    <li style="margin-bottom: 1rem; color: #4ade80;">✔ AI + Human Vetted (Top 5%)</li>
+                    <li style="margin-bottom: 1rem; color: #4ade80;">✔ Full Legal & Payroll handling</li>
+                    <li style="margin-bottom: 1rem; color: #4ade80;">✔ 24/7 Dedicated Support</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="text-center">
+    <div class="container">
+        <h2 class="mb-2">Choose Your Path</h2>
+        <div class="bento-grid">
+            <div class="glass-card">
+                <h3>For Companies</h3>
+                <p>Scale your team with elite remote developers, designers, and support staff.</p>
+                <a href="{% url 'employers' %}" class="btn btn-primary mt-5">Hire Talent &rarr;</a>
+            </div>
+            <div class="glass-card">
+                <h3>For Professionals</h3>
+                <p>Work with global brands from the comfort of your home. Premium pay, global exposure.</p>
+                <a href="{% url 'careers' %}" class="btn btn-secondary mt-5">Apply Now &rarr;</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

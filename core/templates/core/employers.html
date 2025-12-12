@@ -1,0 +1,129 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="bg-blob blob-2" style="top: 0; right: 0;"></div>
+
+<section class="container mt-5">
+    <div class="text-center mb-2">
+        <h1>Hire Top 5% Talent</h1>
+        <p>Your search for verified, skilled, and remote-ready professionals ends here.</p>
+    </div>
+
+    <!-- Hiring Process -->
+    <div class="glass-card mb-2">
+        <h2 class="text-gradient text-center mb-2">Our 3-Step Process</h2>
+        <div class="bento-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="text-center">
+                <div style="font-size: 3rem; color: var(--primary); font-weight: bold;">1</div>
+                <h3>Requirements</h3>
+                <p>We analyze your needs, culture, and tech stack.</p>
+            </div>
+            <div class="text-center">
+                <div style="font-size: 3rem; color: var(--secondary); font-weight: bold;">2</div>
+                <h3>Vetting</h3>
+                <p>AI screening + Expert Interviews + RemDesk Score.</p>
+            </div>
+            <div class="text-center">
+                <div style="font-size: 3rem; color: var(--accent); font-weight: bold;">3</div>
+                <h3>Selection</h3>
+                <p>Interview top 3 candidates. Hire the best.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scoring System -->
+    <div class="bento-grid mb-2">
+        <div class="glass-card" style="grid-column: span 2;">
+            <h2>RemDesk Standardized Score</h2>
+            <p>Our proprietary 100-point evaluation ensures you only see the best.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;">
+                <div>
+                    <h4 style="color:var(--primary);">Technical (20pts)</h4>
+                    <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                        <div style="width: 100%; height: 100%; background: var(--primary);"></div>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color:var(--secondary);">Communication (20pts)</h4>
+                    <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                        <div style="width: 100%; height: 100%; background: var(--secondary);"></div>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color:var(--accent);">Experience (20pts)</h4>
+                    <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                        <div style="width: 100%; height: 100%; background: var(--accent);"></div>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color:white;">Culture & Remote (40pts)</h4>
+                    <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                        <div style="width: 100%; height: 100%; background: white;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="glass-card flex-column" style="justify-content: center;">
+            <div class="text-center">
+                <h3 style="font-size: 3.5rem; color: var(--primary);">4/5</h3>
+                <p>Average Candidate Score</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing -->
+    <h2 class="text-center mb-2">Simple Pricing</h2>
+    <div class="bento-grid mb-2">
+        <div class="glass-card text-center">
+            <h3>Competitive</h3>
+            <div class="text-gradient" style="font-size: 2.5rem; font-weight: 800;">12.5%</div>
+            <p>of Annual CTC</p>
+            <p style="font-size: 0.9rem; opacity: 0.7;">For roles $10k-$50k</p>
+        </div>
+        <div class="glass-card text-center" style="border-color: var(--primary);">
+            <div
+                style="position: absolute; top:0; right:0; background: var(--primary); padding: 5px 10px; font-size: 0.8rem; border-radius: 0 0 0 10px;">
+                POPULAR</div>
+            <h3>Specialized</h3>
+            <div class="text-gradient" style="font-size: 2.5rem; font-weight: 800;">15%</div>
+            <p>of Annual CTC</p>
+            <p style="font-size: 0.9rem; opacity: 0.7;">For roles $50k-$150k</p>
+        </div>
+        <div class="glass-card text-center">
+            <h3>Leadership</h3>
+            <div class="text-gradient" style="font-size: 2.5rem; font-weight: 800;">18.5%</div>
+            <p>of Annual CTC</p>
+            <p style="font-size: 0.9rem; opacity: 0.7;">For roles $150k+</p>
+        </div>
+    </div>
+
+    <!-- Hire Form -->
+    <div class="glass-card" id="hire-form">
+        <h2 class="text-center mb-2">Start Hiring</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="bento-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="form-group">
+                    <label>Company Name</label>
+                    {{ form.company_name }}
+                </div>
+                <div class="form-group">
+                    <label>Contact Person</label>
+                    {{ form.contact_person }}
+                </div>
+                <div class="form-group">
+                    <label>Work Email</label>
+                    {{ form.work_email }}
+                </div>
+                <div class="form-group">
+                    <label>Role to Hire</label>
+                    {{ form.role_to_hire }}
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <button type="submit" class="btn btn-primary" style="width: 50%;">Request Talent</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

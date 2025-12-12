@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="bg-blob blob-1"></div>
+
+<section class="container mt-5">
+    <div class="text-center mb-2">
+        <h1>Join the Global Workforce</h1>
+        <p>Work with top international startups, earn in USD/EUR equivalent, and grow your career.</p>
+    </div>
+
+    <div class="bento-grid mb-2">
+        <div class="glass-card">
+            <h3>Global Exposure</h3>
+            <p>Work directly with founders and teams from US, UK, and Europe.</p>
+        </div>
+        <div class="glass-card">
+            <h3>Verified Pay</h3>
+            <p>Guaranteed payments and competitive market rates.</p>
+        </div>
+        <div class="glass-card">
+            <h3>Career Growth</h3>
+            <p>Access to mentorship and high-impact projects.</p>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <h2 class="text-center mb-2">Apply Now</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="bento-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    {{ form.full_name }}
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    {{ form.email }}
+                </div>
+                <div class="form-group">
+                    <label>Primary Skill</label>
+                    {{ form.primary_skill }}
+                </div>
+                <div class="form-group">
+                    <label>Experience (Years)</label>
+                    {{ form.experience_years }}
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>LinkedIn / Portfolio URL</label>
+                    {{ form.portfolio_url }}
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <button type="submit" class="btn btn-secondary" style="width: 50%;">Submit Application</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

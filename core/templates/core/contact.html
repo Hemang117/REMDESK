@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="bg-blob blob-2" style="bottom: 0; left: 0;"></div>
+
+<section class="container mt-5"
+    style="min-height: 80vh; display: flex; flex-direction: column; justify-content: center;">
+    <div class="bento-grid" style="grid-template-columns: 1fr 1fr; gap: 4rem;">
+        <div>
+            <h1>Get in Touch</h1>
+            <p>Have questions? We're here to help you build your dream team or find your dream job.</p>
+
+            <div class="glass-card mt-5">
+                <h3>Contact Info</h3>
+                <p><strong>Email:</strong> contact@remdesk.com</p>
+                <p><strong>Support:</strong> +91 98765 43210</p>
+                <p><strong>HQ:</strong> Bangalore, India</p>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2>Send a Message</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Name</label>
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    {{ form.email }}
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    {{ form.message }}
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
