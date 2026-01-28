@@ -69,7 +69,42 @@ def careers(request):
     if request.method == 'POST':
         form = CandidateForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            # Vercel filesystem is read-only, so we cannot save files to disk.
+            # Workaround: Save the data, but skip the file save, and try to email it.
+            application = form.save(commit=False)
+            
+            uploaded_file = request.FILES.get('resume')
+            if uploaded_file:
+                # Verify file size (limit to 5MB to be safe for email)
+                if uploaded_file.size > 5 * 1024 * 1024:
+                    messages.error(request, "File too large. Please upload under 5MB.")
+                    return render(request, 'core/careers.html', {'form': form})
+                    
+                # Prevent Django from trying to write to disk
+                application.resume = None 
+            
+            application.save()
+            
+            # Attempt to email the resume
+            if uploaded_file:
+                from django.core.mail import EmailMessage
+                import os
+                
+                try:
+                    admin_email = os.getenv('EMAIL_HOST_USER', 'admin@remdeskjobs.com')
+                    email = EmailMessage(
+                        subject=f"New Resume: {application.full_name}",
+                        body=f"A new candidate applied.\n\nName: {application.full_name}\nRole: {application.primary_skill}\nExperience: {application.experience_years} years\n\nSee attachment for resume.",
+                        from_email=None, # Uses default from settings
+                        to=[admin_email], 
+                    )
+                    # Read file content for attachment
+                    email.attach(uploaded_file.name, uploaded_file.read(), uploaded_file.content_type)
+                    email.send()
+                except Exception as e:
+                    print(f"Resume email failed: {e}")
+                    # We don't error out the user, we accept the text application at least.
+            
             messages.success(request, 'Application submitted! We will be in touch.')
             return redirect('careers')
     else:
