@@ -1,0 +1,381 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Pricing & Partnerships | RemDesk{% endblock %}
+
+{% block content %}
+<section class="page-header text-center" style="padding: 6rem 0 3rem; background: var(--bg-dark); color: white;">
+    <div class="container">
+        <h1 style="color: rgb(0, 0, 0)">Simple, Transparent Pricing</h1>
+        <p style="max-width: 600px; margin: 0 auto; color: rgba(76, 76, 76, 0.7);">Pay only for successful hires. No
+            hidden retainers. No setup fees.</p>
+
+        <!-- Region Toggle -->
+        <div class="pricing-toggle-wrapper text-center mt-5">
+            <div class="toggle-container">
+                <input type="checkbox" id="pricing-toggle" class="toggle-checkbox">
+                <label for="pricing-toggle" class="toggle-track">
+                    <span class="toggle-option" id="label-global">Global / US Hiring</span>
+                    <span class="toggle-option" id="label-india">Domestic Hiring (India)</span>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Tables -->
+<section style="margin-top: -3rem;">
+    <div class="container">
+        <div class="pricing-grid">
+            <!-- Tier 1 -->
+            <div class="card pricing-card">
+                <div class="pricing-header">
+                    <h3>Competitive</h3>
+                    <p class="pricing-desc">For cost-effective placements</p>
+                    <div class="pricing-fee"><span class="dynamic-fee" data-usd="12.5%" data-inr="8 - 12%">12.5%</span>
+                    </div>
+                    <div class="pricing-sub"><span class="dynamic-term">of annual Salary</span></div>
+                </div>
+                <div class="pricing-body">
+                    <p class="ctc-range"><span class="dynamic-term-sm">Salary</span> Range: <span class="dynamic-range"
+                            data-usd="$10k - $50k" data-inr="₹8L - ₹40L">$10k - $50k</span></p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> 3-Day Shortlist</li>
+                        <li><i class="fas fa-check"></i> Standard Vetting</li>
+                        <li><i class="fas fa-check"></i> 60-Day Replacement Guarantee</li>
+                        <li><i class="fas fa-check"></i> Dedicated Account Manager</li>
+                    </ul>
+                    <a href="{% url 'contact' %}" class="btn btn-outline btn-full">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Tier 2 -->
+            <div class="card pricing-card featured">
+                <div class="popular-tag">Most Popular</div>
+                <div class="pricing-header">
+                    <h3>Specialized Talent</h3>
+                    <p class="pricing-desc">For mid-senior roles</p>
+                    <div class="pricing-fee"><span class="dynamic-fee" data-usd="15%" data-inr="12 - 15%">15%</span>
+                    </div>
+                    <div class="pricing-sub"><span class="dynamic-term">of annual Salary</span></div>
+                </div>
+                <div class="pricing-body">
+                    <p class="ctc-range"><span class="dynamic-term-sm">Salary</span> Range: <span class="dynamic-range"
+                            data-usd="$50k - $150k" data-inr="₹40L - ₹1.2Cr">$50k - $150k</span></p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Priority Sourcing</li>
+                        <li><i class="fas fa-check"></i> Advanced Technical Vetting</li>
+                        <li><i class="fas fa-check"></i> 60-Day Replacement Guarantee</li>
+                        <li><i class="fas fa-check"></i> Dedicated Account Manager</li>
+                    </ul>
+                    <a href="{% url 'contact' %}" class="btn btn-primary btn-full">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Tier 3 -->
+            <div class="card pricing-card">
+                <div class="pricing-header">
+                    <h3>Leadership Roles</h3>
+                    <p class="pricing-desc">For niche, high-level positions</p>
+                    <div class="pricing-fee"><span class="dynamic-fee" data-usd="18.5%" data-inr="15 - 20%">18.5%</span>
+                    </div>
+                    <div class="pricing-sub"><span class="dynamic-term">of annual Salary</span></div>
+                </div>
+                <div class="pricing-body">
+                    <p class="ctc-range"><span class="dynamic-term-sm">Salary</span> Range: <span class="dynamic-range"
+                            data-usd="$150k+" data-inr="₹1.2Cr+">$150k+</span></p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Executive Search</li>
+                        <li><i class="fas fa-check"></i> Leadership Assessment</li>
+                        <li><i class="fas fa-check"></i> Extended Replacement Guarantee</li>
+                        <li><i class="fas fa-check"></i> White-glove Support</li>
+                    </ul>
+                    <a href="{% url 'contact' %}" class="btn btn-outline btn-full">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Comparison / Value -->
+<section>
+    <div class="container">
+        <div class="section-title">
+            <h2>The RemDesk Advantage</h2>
+            <p>Why we are the smarter choice.</p>
+        </div>
+
+        <div class="comparison-box">
+            <div class="comp-row head">
+                <div class="col"></div>
+                <div class="col text-center"><strong>RemDesk</strong></div>
+                <div class="col text-center text-muted">Traditional Agencies</div>
+            </div>
+            <div class="comp-row">
+                <div class="col"><strong>Placement Fee</strong></div>
+                <div class="col text-center text-primary"><span class="dynamic-fee-range" data-usd="12.5% - 18.5%"
+                        data-inr="8% - 20%">12.5% - 18.5%</span></div>
+                <div class="col text-center text-muted">20% - 30%</div>
+            </div>
+            <div class="comp-row">
+                <div class="col"><strong>Time to Hire</strong></div>
+                <div class="col text-center text-primary">3-14 Days</div>
+                <div class="col text-center text-muted">30-60 Days</div>
+            </div>
+            <div class="comp-row">
+                <div class="col"><strong>Replacement Policy</strong></div>
+                <div class="col text-center text-primary">Free (60 Days)</div>
+                <div class="col text-center text-muted">Variable / Paid</div>
+            </div>
+            <div class="comp-row">
+                <div class="col"><strong>Talent Verification</strong></div>
+                <div class="col text-center text-primary">3-Step (AI + Human + Tech)</div>
+                <div class="col text-center text-muted">Resume Forwarding</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom pricing -->
+<section style="background: var(--bg-light); padding: 5rem 0;">
+    <div class="container text-center">
+        <h3>Need a custom solution?</h3>
+        <p class="mb-2">For high-volume hiring or enterprise partnerships, we offer tailored fee structures.</p>
+        <a href="{% url 'contact' %}" class="btn btn-outline">Contact for Custom Pricing</a>
+    </div>
+</section>
+
+<style>
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .pricing-card {
+        position: relative;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .pricing-card.featured {
+        border: 2px solid var(--primary);
+        transform: scale(1.05);
+        z-index: 10;
+    }
+
+    @media (max-width: 900px) {
+        .pricing-card.featured {
+            transform: scale(1);
+        }
+    }
+
+    .popular-tag {
+        background: var(--primary);
+        color: white;
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .pricing-header {
+        background: var(--bg-light);
+        padding: 2.5rem 2rem;
+        text-align: center;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .pricing-fee {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--secondary);
+        line-height: 1;
+        margin-top: 1rem;
+    }
+
+    .pricing-sub {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    .pricing-body {
+        padding: 2rem;
+    }
+
+    .ctc-range {
+        font-weight: 600;
+        text-align: center;
+        color: var(--primary);
+        background: rgba(37, 99, 235, 0.1);
+        padding: 0.5rem;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+    }
+
+    .pricing-body ul {
+        margin-bottom: 2rem;
+    }
+
+    .pricing-body li {
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .pricing-body i {
+        color: var(--accent);
+    }
+
+    .btn-full {
+        width: 100%;
+    }
+
+    .comparison-box {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .comp-row {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr;
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .comp-row:last-child {
+        border-bottom: none;
+    }
+
+    .comp-row.head {
+        background: var(--bg-light);
+    }
+
+    @media (max-width: 600px) {
+        .comp-row {
+            font-size: 0.9rem;
+            padding: 1rem;
+        }
+    }
+
+    /* Toggle Switch Styles - Segmented Control */
+    .pricing-toggle-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .toggle-container {
+        position: relative;
+        display: inline-block;
+        background-color: #f1f5f9;
+        border-radius: 50px;
+        padding: 4px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+    }
+
+    .toggle-checkbox {
+        display: none;
+    }
+
+    .toggle-track {
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: auto;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .toggle-option {
+        position: relative;
+        z-index: 2;
+        padding: 12px 32px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        transition: color 0.3s ease;
+        text-align: center;
+        min-width: 200px;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 50%;
+        background-color: white;
+        border-radius: 46px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        z-index: 1;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    /* Active States via Checkbox */
+    /* Default: Global (Left) is Active */
+    .toggle-checkbox:not(:checked)~.toggle-track #label-global {
+        color: var(--primary);
+    }
+
+    .toggle-checkbox:checked~.toggle-track #label-india {
+        color: var(--primary);
+    }
+
+    .toggle-checkbox:checked~.toggle-track .toggle-slider {
+        transform: translateX(100%);
+    }
+
+    /* Hover effects */
+    .toggle-option:hover {
+        color: var(--text-main);
+    }
+
+    .toggle-checkbox:not(:checked)~.toggle-track #label-global:hover,
+    .toggle-checkbox:checked~.toggle-track #label-india:hover {
+        color: var(--primary-dark);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.getElementById('pricing-toggle');
+        const termElements = document.querySelectorAll('.dynamic-term');
+        const termSmElements = document.querySelectorAll('.dynamic-term-sm');
+        const rangeElements = document.querySelectorAll('.dynamic-range');
+        const feeElements = document.querySelectorAll('.dynamic-fee');
+        const feeRangeElements = document.querySelectorAll('.dynamic-fee-range');
+        // Note: labels are now styled purely by CSS sibling selectors based on checkbox state
+        // but we still need JS for the text content updates.
+
+        toggle.addEventListener('change', function () {
+            if (this.checked) {
+                // India Mode (Domestic Hiring)
+                termElements.forEach(el => el.textContent = 'of annual CTC');
+                termSmElements.forEach(el => el.textContent = 'CTC');
+                rangeElements.forEach(el => el.textContent = el.getAttribute('data-inr'));
+                feeElements.forEach(el => el.textContent = el.getAttribute('data-inr'));
+                feeRangeElements.forEach(el => el.textContent = el.getAttribute('data-inr'));
+            } else {
+                // Global Mode (International Hiring)
+                termElements.forEach(el => el.textContent = 'of annual Salary');
+                termSmElements.forEach(el => el.textContent = 'Salary');
+                rangeElements.forEach(el => el.textContent = el.getAttribute('data-usd'));
+                feeElements.forEach(el => el.textContent = el.getAttribute('data-usd'));
+                feeRangeElements.forEach(el => el.textContent = el.getAttribute('data-usd'));
+            }
+        });
+    });
+</script>
+{% endblock %}

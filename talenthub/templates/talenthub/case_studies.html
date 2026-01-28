@@ -1,0 +1,38 @@
+{% extends 'talenthub/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section-padding" style="background: var(--color-bg); padding-top: 120px;">
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 20px;">Success Stories</h1>
+        <p style="text-align: center; max-width: 700px; margin: 0 auto 60px; font-size: 1.1rem; opacity: 0.8;">
+            See how we've helped leading companies save time and money.
+        </p>
+
+        <div class="services-grid">
+            {% for case in cases %}
+            <div class="service-card reveal"
+                style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                {% if case.image %}
+                <img src="{{ case.image.url }}" alt="{{ case.title }}"
+                    style="width: 100%; height: 250px; object-fit: cover;">
+                {% else %}
+                <div style="width: 100%; height: 250px; background: #ddd;"></div>
+                {% endif %}
+                <div style="padding: 30px; flex: 1; display: flex; flex-direction: column;">
+                    <p style="color: var(--color-secondary); font-size: 0.9rem; font-weight: 600;">{{ case.client_name
+                        }}</p>
+                    <h3 style="margin-bottom: 15px;">{{ case.title }}</h3>
+                    <p style="font-weight: 700; color: var(--color-navy); margin-bottom: 15px;">Result: {{
+                        case.result_metric }}</p>
+                    <p style="opacity: 0.8; margin-bottom: 20px; flex: 1;">{{ case.summary }}</p>
+                    <a href="#" style="color: var(--color-primary); font-weight: 500;">Read Case Study &rarr;</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No case studies available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

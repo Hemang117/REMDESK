@@ -1,131 +1,189 @@
 {% load static %}
-{% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemDesk | Hire Top 5% Remote Talent from India</title>
+    <title>{% block title %}RemDesk | Smarter Global Hiring{% endblock %}</title>
 
-    <!-- SEO Meta Tags -->
+    <!-- Meta Tags -->
     <meta name="description"
-        content="RemDesk helps global companies hire verified, skilled remote talent from India. Save up to 70% costs with our pre-vetted professionals.">
+        content="RemDesk helps companies build global remote teams with verified talent from India. Smarter, simpler, scalable.">
+    <meta name="keywords" content="remote hiring, global talent, indian developers, staff augmentation">
+    <meta name="author" content="RemDesk Inc.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
         rel="stylesheet">
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}?v=8.0">
 </head>
 
 <body>
 
-    <header>
+    <!-- Header -->
+    <header id="main-header">
         <div class="container">
             <nav>
                 <a href="{% url 'index' %}" class="logo">Rem<span>Desk</span></a>
+
                 <ul class="nav-links">
-                    <li><a href="{% url 'employers' %}">For Employers</a></li>
-                    <li><a href="{% url 'careers' %}">Find Jobs</a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li>
+                        <a href="{% url 'services' %}">
+                            Services
+                        </a>
+                    </li>
+                    <li><a href="{% url 'how_it_works' %}">How It Works</a></li>
+                    <li><a href="{% url 'pricing' %}">Pricing</a></li>
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'careers' %}" style="color: var(--primary); font-weight: 600;">Join Us</a></li>
                 </ul>
+
                 <div class="nav-actions">
-                    <a href="#" class="btn btn-outline js-open-auth">Login</a>
-                    <a href="{% url 'employers' %}" class="btn btn-primary">Hire Talent</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'account_logout' %}" class="btn btn-outline" style="border: none;">Logout</a>
+                    {% else %}
+                    <a href="{% url 'account_login' %}" class="btn btn-outline" style="border: none;">Login</a>
+                    <a href="{% url 'account_signup' %}" class="btn btn-primary btn-pulse">Sign Up</a>
+                    {% endif %}
+                </div>
+
+                <!-- Mobile Toggle -->
+                <div class="mobile-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
                 </div>
             </nav>
         </div>
     </header>
 
+    <script>
+        // Scroll Effect
+        window.addEventListener('scroll', function () {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 20) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+    </script>
+
+    <!-- Messages -->
     {% if messages %}
-    <div class="container mt-2"
-        style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 90%; max-width: 600px;">
+    <div class="container"
+        style="position: fixed; top: 100px; right: 20px; z-index: 2000; width: auto; max-width: 400px;">
         {% for message in messages %}
-        <div class="glass-card"
-            style="padding: 1rem; border: 1px solid var(--primary); background: rgba(16, 185, 129, 0.1); margin-bottom: 1rem;">
-            <p class="text-center mb-0" style="color: white;">{{ message }}</p>
+        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %}">
+            {{ message }}
         </div>
         {% endfor %}
     </div>
     {% endif %}
 
+    <!-- Main Content -->
     <main>
         {% block content %}
         {% endblock %}
     </main>
 
+    <!-- Footer -->
     <footer>
-        <div class="container">
-            <p>&copy; {% now "Y" %} RemDesk. All rights reserved.</p>
+        <!-- Infinite Scroll Marquee -->
+        <div class="marquee-container">
+            <div class="marquee-content">
+                <span class="marquee-item"><i class="fab fa-python"></i> Python</span>
+                <span class="marquee-item"><i class="fab fa-react"></i> React</span>
+                <span class="marquee-item"><i class="fab fa-aws"></i> AWS</span>
+                <span class="marquee-item"><i class="fab fa-node"></i> Node.js</span>
+                <span class="marquee-item"><i class="fas fa-database"></i> SQL</span>
+                <span class="marquee-item"><i class="fab fa-docker"></i> DevOps</span>
+                <span class="marquee-item"><i class="fas fa-mobile-alt"></i> Flutter</span>
+                <span class="marquee-item"><i class="fab fa-js"></i> TypeScript</span>
+                <!-- Duplicate for seamless loop -->
+                <span class="marquee-item"><i class="fab fa-python"></i> Python</span>
+                <span class="marquee-item"><i class="fab fa-react"></i> React</span>
+                <span class="marquee-item"><i class="fab fa-aws"></i> AWS</span>
+                <span class="marquee-item"><i class="fab fa-node"></i> Node.js</span>
+                <span class="marquee-item"><i class="fas fa-database"></i> SQL</span>
+                <span class="marquee-item"><i class="fab fa-docker"></i> DevOps</span>
+                <span class="marquee-item"><i class="fas fa-mobile-alt"></i> Flutter</span>
+                <span class="marquee-item"><i class="fab fa-js"></i> TypeScript</span>
+            </div>
+        </div>
+
+        <div class="container footer-container">
+            <div class="footer-cta text-center mb-5">
+                <h2 class="display-3" style="color: white; margin-bottom: 2rem;">Ready to scale?</h2>
+                <a href="{% url 'contact' %}" class="btn btn-primary"
+                    style="padding: 1rem 2.5rem; font-size: 1.1rem;">Get Your Shortlist</a>
+            </div>
+
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo"
+                        style="color: white; font-size: 2rem; margin-bottom: 1rem; display: block;">Rem<span>Desk</span></a>
+                    <p style="opacity: 0.7; max-width: 250px;">Redefining remote hiring with data-driven vetting and
+                        global compliance.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="{% url 'services' %}">Services</a></li>
+                        <li><a href="{% url 'pricing' %}">Pricing</a></li>
+                        <li><a href="{% url 'how_it_works' %}">Process</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'careers' %}">Careers</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="mailto:admin@remdeskjobs.com">admin@remdeskjobs.com</a></li>
+                        <li><a href="https://www.linkedin.com/company/remdesk/" target="_blank">LinkedIn</a></li>
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                &copy; {% now "Y" %} RemDesk Inc. &bull; <a href="#">Privacy</a> &bull; <a href="#">Terms</a>
+            </div>
         </div>
     </footer>
 
-    <div id="auth-modal" class="modal-overlay">
-        <div class="modal-glass">
-            <button class="modal-close">&times;</button>
-            <div class="modal-content">
-                <h2 class="text-center mb-2">Welcome to RemDesk</h2>
-                <p class="text-center text-secondary mb-2">Join the future of global work.</p>
+    <!-- Mobile Menu Script -->
+    <script>
+        function toggleMobileMenu() {
+            // Simple toggle for now, can be enhanced
+            alert("Mobile menu would slide out here. Implementation pending.");
+        }
 
-                <div class="auth-tabs">
-                    <button class="auth-tab active" data-tab="login">Login</button>
-                    <button class="auth-tab" data-tab="signup">Sign Up</button>
-                </div>
-
-                <div class="social-buttons">
-                    <a href="{% provider_login_url 'google' %}" class="btn-social google">
-                        <i class="fab fa-google"></i> Continue with Google
-                    </a>
-                    <a href="#" class="btn-social twitter">
-                        <i class="fab fa-x-twitter"></i> Continue with X
-                    </a>
-                </div>
-
-                <div class="divider"><span>Or continue with email</span></div>
-
-                <form class="auth-form" id="login-form">
-                    <div class="form-group">
-                        <input type="email" placeholder="Email Address" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="password" placeholder="Password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Log In</button>
-                </form>
-
-                <form class="auth-form hidden" id="signup-form">
-                    <div class="form-group">
-                        <input type="text" placeholder="Full Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" placeholder="Email Address" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="password" placeholder="Password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Create Account</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="auth-modal" class="modal-overlay">
-        <!-- ... modal content ... -->
-    </div>
-
-    <!-- 3D Background Container -->
-    <div id="canvas-container"></div>
-
-    <!-- Three.js Module -->
-    <script type="module" src="{% static 'core/js/space_background.js' %}"></script>
-    <script src="{% static 'core/js/main.js' %}"></script>
+        // Auto-dismiss messages
+        setTimeout(function () {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 5000);
+    </script>
 </body>
 
 </html>

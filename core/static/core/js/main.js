@@ -22,58 +22,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('header');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
-            header.style.background = 'rgba(3, 7, 18, 0.9)';
-            header.style.backdropFilter = 'blur(20px)';
+            header.style.background = 'rgba(255, 255, 255, 0.95)';
+            header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)';
         } else {
-            header.style.background = 'rgba(3, 7, 18, 0.7)';
+            header.style.background = 'rgba(255, 255, 255, 0.9)';
+            header.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.05)';
         }
     });
 
-    // Auth Modal Logic
-    const modal = document.getElementById('auth-modal');
-    const closeBtn = document.querySelector('.modal-close');
-    const authTabs = document.querySelectorAll('.auth-tab');
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
 
-    // Open Modal Triggers
-    document.querySelectorAll('.js-open-auth').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            modal.classList.add('active');
-        });
-    });
 
-    // Close Modal
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            modal.classList.remove('active');
-        });
-    }
+    // Scroll Animation Observer (AOS style)
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
 
-    // Close on outside click
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.remove('active');
-        }
-    });
-
-    // Switch Tabs
-    authTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove active class from all tabs
-            authTabs.forEach(t => t.classList.remove('active'));
-            // Add to clicked
-            tab.classList.add('active');
-
-            const target = tab.dataset.tab;
-            if (target === 'login') {
-                loginForm.classList.remove('hidden');
-                signupForm.classList.add('hidden');
-            } else {
-                loginForm.classList.add('hidden');
-                signupForm.classList.remove('hidden');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target); // Only animate once
             }
         });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
     });
 });

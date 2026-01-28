@@ -37,8 +37,8 @@ const initSpaceBackground = () => {
 
         const gradient = ctx.createRadialGradient(center, center, 0, center, center, center);
         gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        gradient.addColorStop(0.2, 'rgba(230, 240, 255, 0.9)');
-        gradient.addColorStop(0.5, 'rgba(200, 220, 255, 0.2)');
+        gradient.addColorStop(0.2, 'rgba(220, 230, 255, 0.8)');
+        gradient.addColorStop(0.5, 'rgba(100, 150, 255, 0.1)');
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
         ctx.fillStyle = gradient;
@@ -63,10 +63,10 @@ const initSpaceBackground = () => {
     starsGeometry.setAttribute('scale', new THREE.BufferAttribute(scaleArray, 1));
 
     const starsMaterial = new THREE.PointsMaterial({
-        size: 0.25, // Increased size
+        size: 0.12,
         map: getStarTexture(),
         transparent: true,
-        opacity: 1.0, // Increased opacity
+        opacity: 0.9,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
         sizeAttenuation: true,
@@ -95,7 +95,7 @@ const initSpaceBackground = () => {
 
     const planeGeo = createPlaneGeometry();
     const planeMat = new THREE.MeshBasicMaterial({
-        color: 0xffffff, // White
+        color: 0xffffff,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.9
@@ -120,8 +120,8 @@ const initSpaceBackground = () => {
         const group = new THREE.Group();
         const plane = new THREE.Mesh(planeGeo, planeMat);
 
-        // Slightly larger as requested (0.8 - 1.4)
-        const scale = 0.8 + Math.random() * 0.6;
+        // Slightly larger as requested (0.6 - 1.1)
+        const scale = 0.6 + Math.random() * 0.5;
         plane.scale.set(scale, scale, scale);
 
         // Positioning
@@ -142,13 +142,6 @@ const initSpaceBackground = () => {
         plane.rotateX(-Math.PI / 2);
         group.add(plane);
 
-        // Tail Marker (Anchor for trails at Point 1 - Tail)
-        // Point 1 is at (0, 0) in shape, translated to (0, -0.05, 0).
-        // After rotateX(-90), it is at (0, 0, 0.05) in Group space.
-        const tailMarker = new THREE.Object3D();
-        tailMarker.position.set(0, 0, 0.05 * scale);
-        group.add(tailMarker);
-
         // Trail Buffer
         const trailMaxPoints = 400;
         const trailPositions = new Float32Array(trailMaxPoints * 3);
@@ -157,7 +150,7 @@ const initSpaceBackground = () => {
         // Trail Material
         const trailMat = new THREE.ShaderMaterial({
             uniforms: {
-                color: { value: new THREE.Color(0xffffff) }, // White trails
+                color: { value: new THREE.Color(0xaaddff) },
                 tex: { value: dotTexture }
             },
             vertexShader: `
@@ -166,7 +159,7 @@ const initSpaceBackground = () => {
                 void main() {
                     vAlpha = alpha;
                     vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                    gl_PointSize = 6.0 * (30.0 / -mvPosition.z);
+                    gl_PointSize = 4.0 * (30.0 / -mvPosition.z);
                     gl_Position = projectionMatrix * mvPosition;
                 }
             `,
@@ -195,7 +188,6 @@ const initSpaceBackground = () => {
         airplanes.push({
             group: group,
             scale: scale, // Store scale relative to plane geometry
-            tailMarker: tailMarker,
             trailPoints: trailPoints,
             trailPositions: trailPositions,
             trailAlphas: trailAlphas,
@@ -231,39 +223,73 @@ const initSpaceBackground = () => {
             if (obj.group.position.z > 20) obj.group.position.z = -20;
             if (obj.group.position.z < -20) obj.group.position.z = 20;
 
-            // STRICT Orientation:
-            // 1. Calculate true velocity vector (dx, dy, dz)
-            const dx = -Math.sin(obj.angle) * obj.radius * obj.angleSpeed;
-            const dy = Math.cos(obj.angle) * obj.radius * obj.angleSpeed;
-            const dz = obj.driftZ;
+            // Orientation
+            const tangentX = -Math.sin(obj.angle);
+            const tangentY = Math.cos(obj.angle);
 
-            const velocity = new THREE.Vector3(dx, dy, dz);
-
-            // 2. Fix Roll: Ensure plane is "flat" against the camera view by forcing Up to +Z
-            obj.group.up.set(0, 0, 1);
-
-            // 3. Fix Direction: 
-            // -Z is Nose. We want -Z to point along Velocity.
-            // lookAt aligns +Z to target.
-            // So +Z should point "Backwards" (-Velocity).
-            // target = pos + (-velocity) = pos - velocity.
-            const target = obj.group.position.clone().sub(velocity);
-
+            // Tangent Logic for lookAt:
+            // Since we use lookAt(target), and objects face -Z towards target.
+            // If tangent is forward, we lookAt(pos + tangent).
+            // This means -Z is Forward. +Z is Backward.
+            // Tail is at +Z.
+            const target = obj.group.position.clone().add(new THREE.Vector3(tangentX, tangentY, 0));
             obj.group.lookAt(target);
 
             // --- Trail Emission ---
-            if (renderer.info.render.frame % 5 === 0) { // More frequent emission for better visibility
+            if (renderer.info.render.frame % 3 === 0) {
                 const idx = obj.trailIdx;
                 const positions = obj.trailPositions;
                 const alphas = obj.trailAlphas;
 
-                // Use Tail Marker World Position (Point 1)
-                const worldPos = new THREE.Vector3();
-                obj.tailMarker.getWorldPosition(worldPos);
+                // Calculate Tail Position
+                // Tangent vector is normalized direction of travel.
+                // We want to go backwards -> -tangent.
+                // Distance = Plane geometry length (~0.6 total) * scale * ~0.5 (halfway) + slight gap
+                // Geometry is translated so center is roughly mid-body. Tail is ~0.1 units "back" (visually).
+                // Actually after rotation, +Z is back.
+                // Offset scalar roughly 0.25 * scale ensures we are behind the wings.
+                const offset = 0.4 * obj.scale;
 
-                positions[idx * 3] = worldPos.x;
-                positions[idx * 3 + 1] = worldPos.y;
-                positions[idx * 3 + 2] = worldPos.z;
+                // Direction: -Tangent (Backwards in World Space)
+                // Actually, simply: pos - (tangent * offset)
+                const tailX = obj.group.position.x - (tangentX * offset);
+                const tailY = obj.group.position.y - (tangentY * offset);
+                // Tangent is xy only, need to account for z orientation? 
+                // The plane is "flat" on the spiral cylinder, so local Z is parallel to spiral tangent?
+                // Yes, group.lookAt aligns -Z to tangent. So +Z axis IS -tangent.
+                // But the tangent vector (tangentX, tangentY, 0) is unit length approx.
+                // Wait, if angleSpeed is small, movement is small... no tangent is derived from circle math, it's unit vector.
+                // So simpler approach:
+                // tailPos = groupPos + (BackwardVector * offset)
+                // BackwardVector = Vector(-tangentX, -tangentY, 0).normalize()
+
+                // Better yet: group.lookAt aligns the local -Z axis to the target.
+                // So the local Z axis points backwards.
+                // We can just transform local point (0,0,offset) to world.
+                // BUT computing world matrix every frame inside loop is heavy? 
+                // Actually Three.js updates matrices in render(), not update(). 
+                // So obj.group.updateMatrixWorld() is needed if we use localToWorld here.
+                // It's just 40 planes, it's cheap.
+
+                obj.group.updateMatrixWorld(); // Ensure matrix is current
+
+                // Create vector for tail offset (local space)
+                // Plane is rotated -90 X. 
+                // Geometry: Tail is at (0, 0) roughly in shape, translated to (0, -0.05, 0).
+                // After RotateX(-90): 
+                // Local Y -> World -Z (Forward)
+                // Local -Y -> World +Z (Backward)
+                // Tail is at "bottom" of Y shape (-0.1). So it becomes "back" (+Z).
+                // So a positive Z offset in local space is correct.
+                const vec = new THREE.Vector3(0, 0.25 * obj.scale, 0); // Local: +Y is nose? No wait. 
+                // Let's stick to world math, less rotation confusion.
+                // Use the calculated tangent.
+
+                const normTangent = new THREE.Vector3(tangentX, tangentY, 0).normalize();
+
+                positions[idx * 3] = obj.group.position.x - (normTangent.x * offset);
+                positions[idx * 3 + 1] = obj.group.position.y - (normTangent.y * offset);
+                positions[idx * 3 + 2] = obj.group.position.z; // Z drift is negligible for orientation usually
 
                 alphas[idx] = 1.0;
 
@@ -276,7 +302,7 @@ const initSpaceBackground = () => {
             // Decay
             const alphas = obj.trailAlphas;
             for (let k = 0; k < alphas.length; k++) {
-                if (alphas[k] > 0) alphas[k] -= 0.0015;
+                if (alphas[k] > 0) alphas[k] -= 0.002;
                 if (alphas[k] < 0) alphas[k] = 0;
             }
             obj.trailPoints.geometry.attributes.alpha.needsUpdate = true;

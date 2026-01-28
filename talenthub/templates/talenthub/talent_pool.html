@@ -1,0 +1,77 @@
+{% extends 'talenthub/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section-padding" style="background: var(--color-bg); padding-top: 120px;">
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 20px;">Browse Global Talent</h1>
+        <p style="text-align: center; max-width: 700px; margin: 0 auto 60px; font-size: 1.1rem; opacity: 0.8;">
+            Direct access to pre-vetted experts. Filter by skill, role, or region.
+        </p>
+
+        <!-- Mock Filters -->
+        <div
+            style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 50px; display: flex; gap: 20px; flex-wrap: wrap;">
+            <select class="btn" style="background: #f1f5f9; text-align: left; padding: 12px 20px; min-width: 200px;">
+                <option>Role: Any</option>
+                <option>Developer</option>
+                <option>Designer</option>
+                <option>QA Tester</option>
+            </select>
+            <select class="btn" style="background: #f1f5f9; text-align: left; padding: 12px 20px; min-width: 200px;">
+                <option>Skill: Any</option>
+                <option>Python</option>
+                <option>CAN/UDS</option>
+                <option>React</option>
+            </select>
+            <button class="btn btn-primary">Apply Filters</button>
+        </div>
+
+        <div class="services-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+            {% for talent in talents %}
+            <div class="service-card reveal" style="padding: 30px;">
+                <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+                    <div style="width: 60px; height: 60px; background: #ddd; border-radius: 50%; overflow: hidden;">
+                        {% if talent.image %}
+                        <img src="{{ talent.image.url }}" alt="{{ talent.name }}">
+                        {% else %}
+                        <img src="https://ui-avatars.com/api/?name={{ talent.name }}&background=007BFF&color=fff"
+                            alt="{{ talent.name }}">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.3rem; margin: 0;">{{ talent.name }}</h3>
+                        <p style="font-size: 0.9rem; color: var(--color-primary);">{{ talent.role }}</p>
+                    </div>
+                </div>
+
+                <p style="font-size: 0.9rem; margin-bottom: 15px;"><i class="fas fa-map-marker-alt"></i> {{
+                    talent.location }} &bull; {{ talent.experience_years }} Years Exp.</p>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+                    {% comment %} Assuming skills is a comma-separated string {% endcomment %}
+                    <span
+                        style="background: #e0f2fe; color: #0284c7; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Top
+                        Rated</span>
+                </div>
+
+                <p style="font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; opacity: 0.8;">
+                    {{ talent.bio|truncatechars:100 }}
+                </p>
+
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 20px;">
+                    <span style="font-weight: 700; font-size: 1.2rem;">${{ talent.hourly_rate }}/hr</span>
+                    <a href="{% url 'talenthub:contact' %}?talent={{ talent.id }}" class="btn btn-secondary"
+                        style="padding: 8px 20px; font-size: 0.9rem;">Hire Now</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="service-card reveal">
+                <p>No talents found in the pool. <a href="{% url 'admin:index' %}">Add talents in Admin</a>.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

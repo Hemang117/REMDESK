@@ -3,7 +3,18 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('employers/', views.employers, name='employers'),
-    path('careers/', views.careers, name='careers'),
+    path('services/', views.services, name='services'),
+    path('pricing/', views.pricing, name='pricing'),
+    path('how-it-works/', views.how_it_works, name='how_it_works'),
+    path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
+    path('careers/', views.careers, name='careers'),
+    path('submit-lead/', views.submit_lead, name='submit_lead'),
+    
+    # Auth placeholders (or use Allauth URLs)
+    path('login/', views.login_page, name='login'),
+    path('signup/', views.signup_page, name='signup'),
+    
+    # Renamed/Deprecated
+    path('employers/', views.index, name='employers'), # Redirect to home for now, or keep if specific page needed
 ]

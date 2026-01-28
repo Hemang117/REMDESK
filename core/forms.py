@@ -1,27 +1,31 @@
 from django import forms
-from .models import EmployerRequest, CandidateApplication, ContactMessage
+from .models import Lead, CandidateApplication, ContactMessage
 
-class EmployerForm(forms.ModelForm):
+class LeadForm(forms.ModelForm):
     class Meta:
-        model = EmployerRequest
-        fields = ['company_name', 'contact_person', 'work_email', 'role_to_hire']
+        model = Lead
+        fields = ['company_name', 'name', 'email', 'role_requirements', 'budget_range', 'timeline']
         widgets = {
-            'company_name': forms.TextInput(attrs={'placeholder': 'Acme Inc.'}),
-            'contact_person': forms.TextInput(attrs={'placeholder': 'John Doe'}),
-            'work_email': forms.EmailInput(attrs={'placeholder': 'john@acme.com'}),
-            'role_to_hire': forms.Select(),
+            'company_name': forms.TextInput(attrs={'placeholder': 'Company Name', 'class': 'form-input'}),
+            'name': forms.TextInput(attrs={'placeholder': 'Your Name', 'class': 'form-input'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Work Email', 'class': 'form-input'}),
+            'role_requirements': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Describe the role, skills, and experience needed...', 'class': 'form-textarea'}),
+            'budget_range': forms.Select(attrs={'class': 'form-input'}),
+            'timeline': forms.Select(attrs={'class': 'form-input'}),
         }
 
 class CandidateForm(forms.ModelForm):
     class Meta:
         model = CandidateApplication
-        fields = ['full_name', 'email', 'primary_skill', 'experience_years', 'portfolio_url']
+        fields = ['full_name', 'email', 'primary_skill', 'experience_years', 'portfolio_url', 'linkedin_url', 'resume']
         widgets = {
-            'full_name': forms.TextInput(attrs={'placeholder': 'Jane Smith'}),
-            'email': forms.EmailInput(attrs={'placeholder': 'jane@example.com'}),
-            'primary_skill': forms.TextInput(attrs={'placeholder': 'e.g. Python, React, Sales'}),
-            'experience_years': forms.NumberInput(attrs={'placeholder': '3'}),
-            'portfolio_url': forms.URLInput(attrs={'placeholder': 'https://linkedin.com/in/...'}),
+            'full_name': forms.TextInput(attrs={'placeholder': 'Full Name', 'class': 'form-input'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Email Address', 'class': 'form-input'}),
+            'primary_skill': forms.TextInput(attrs={'placeholder': 'Primary Skill (e.g., Python/Django)', 'class': 'form-input'}),
+            'experience_years': forms.NumberInput(attrs={'placeholder': 'Years of Experience', 'class': 'form-input'}),
+            'portfolio_url': forms.URLInput(attrs={'placeholder': 'Portfolio/GitHub URL', 'class': 'form-input'}),
+            'linkedin_url': forms.URLInput(attrs={'placeholder': 'LinkedIn URL', 'class': 'form-input'}),
+            'resume': forms.FileInput(attrs={'class': 'form-input'}),
         }
 
 class ContactForm(forms.ModelForm):
@@ -29,7 +33,7 @@ class ContactForm(forms.ModelForm):
         model = ContactMessage
         fields = ['name', 'email', 'message']
         widgets = {
-            'name': forms.TextInput(),
-            'email': forms.EmailInput(),
-            'message': forms.Textarea(attrs={'rows': 5}),
+            'name': forms.TextInput(attrs={'placeholder': 'Your Name', 'class': 'form-input'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Your Email', 'class': 'form-input'}),
+            'message': forms.Textarea(attrs={'rows': 5, 'placeholder': 'How can we help you?', 'class': 'form-textarea'}),
         }

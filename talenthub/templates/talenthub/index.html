@@ -1,0 +1,285 @@
+{% extends 'talenthub/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    /* Hero Section Specifics */
+    .hero {
+        position: relative;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, var(--color-navy) 0%, #000 100%);
+        color: white;
+        overflow: hidden;
+        margin-top: -80px;
+        /* Offset header */
+        padding-top: 80px;
+    }
+
+    .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.4;
+        z-index: 0;
+        /* Simulate video bg with gradient animation if no video */
+        background: radial-gradient(circle at 50% 50%, rgba(0, 123, 255, 0.2), transparent 70%);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+    }
+
+    .hero-stats {
+        display: flex;
+        gap: 40px;
+        margin-top: 40px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding-top: 20px;
+    }
+
+    .stat-item h3 {
+        font-size: 2.5rem;
+        color: var(--color-primary);
+        margin: 0;
+    }
+
+    .stat-item p {
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+
+    /* Grid Sections */
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .service-card {
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        transition: all 0.4s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 123, 255, 0.1);
+        border-color: var(--color-primary);
+    }
+
+    .service-icon {
+        font-size: 2.5rem;
+        color: var(--color-primary);
+        margin-bottom: 20px;
+    }
+
+    /* Timeline */
+    .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 60px auto;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        height: 100%;
+        width: 2px;
+        background: var(--color-primary);
+        opacity: 0.2;
+    }
+
+    .timeline-step {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+
+    .timeline-step:nth-child(even) {
+        flex-direction: row-reverse;
+    }
+
+    .step-content {
+        width: 45%;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background: var(--color-primary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        z-index: 2;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content reveal">
+        <h1>Hire World-Class Talent <br><span style="color: var(--color-primary);">70% Faster & Cheaper</span></h1>
+        <p class="lead" style="font-size: 1.25rem; opacity: 0.9; margin: 20px 0 30px;">
+            From Python Developers to Vehicle Testing Experts. Connect with pre-vetted top 1% Indian talent in 48 hours.
+        </p>
+        <div class="cta-group">
+            <a href="{% url 'talenthub:contact' %}" class="btn btn-primary" style="margin-right: 15px;">Start Project
+                Free</a>
+            <a href="#" class="btn btn-secondary">Book Expert Call</a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat-item">
+                <h3>5000+</h3>
+                <p>Vetted Talents</p>
+            </div>
+            <div class="stat-item">
+                <h3>300%</h3>
+                <p>Average ROI</p>
+            </div>
+            <div class="stat-item">
+                <h3>48h</h3>
+                <p>Hiring Time</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="section-padding" id="services">
+    <div class="container">
+        <div class="section-header" style="text-align: center; max-width: 700px; margin: 0 auto 50px;">
+            <p style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                Our Expertise</p>
+            <h2>Everything You Need to Scale</h2>
+            <p>We provide end-to-end outsourcing solutions tailored to your industry needs.</p>
+        </div>
+
+        <div class="services-grid">
+            {% for service in services %}
+            <div class="service-card reveal">
+                <i class="{{ service.icon_class }} service-icon"></i>
+                <h3>{{ service.title }}</h3>
+                <p>{{ service.short_description }}</p>
+                <a href="{% url 'talenthub:services' %}#{{ service.slug }}"
+                    style="color: var(--color-primary); font-weight: 500; margin-top: 15px; display: inline-block;">Learn
+                    more &rarr;</a>
+            </div>
+            {% empty %}
+            <!-- Fallback Static Content if DB empty -->
+            <div class="service-card reveal">
+                <i class="fas fa-code service-icon"></i>
+                <h3>Tech Recruitment</h3>
+                <p>Hire top 1% developers in Python, React, Node.js, and more.</p>
+            </div>
+            <div class="service-card reveal">
+                <i class="fas fa-car service-icon"></i>
+                <h3>Vehicle Testing</h3>
+                <p>Experts in CAN, UDS, and ADAS validation protocols.</p>
+            </div>
+            <div class="service-card reveal">
+                <i class="fas fa-users-cog service-icon"></i>
+                <h3>HR Optimization</h3>
+                <p>Streamline your recruitment process with our AI-driven tools.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="section-padding" style="background: white;">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 50px;">How It Works</h2>
+        <div class="timeline">
+            <div class="timeline-step reveal">
+                <div class="step-content">
+                    <h3>1. Share Requirements</h3>
+                    <p>Tell us your needs, tech stack, and budget. We'll map the perfect strategy.</p>
+                </div>
+                <div class="step-number">1</div>
+                <div style="width: 45%;"></div>
+            </div>
+            <div class="timeline-step reveal">
+                <div class="step-content">
+                    <h3>2. Get AI-Matched Profiles</h3>
+                    <p>Receive 3-5 pre-vetted profiles within 48 hours for your review.</p>
+                </div>
+                <div class="step-number">2</div>
+                <div style="width: 45%;"></div>
+            </div>
+            <div class="timeline-step reveal">
+                <div class="step-content">
+                    <h3>3. Interview & Hire</h3>
+                    <p>Conduct interviews and select the best fit. No risk, 14-day trial.</p>
+                </div>
+                <div class="step-number">3</div>
+                <div style="width: 45%;"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Case Studies Preview -->
+<section class="section-padding" style="background: var(--color-bg);">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+            <h2>Success Stories</h2>
+            <a href="{% url 'talenthub:case_studies' %}" class="btn btn-secondary">View All Cases</a>
+        </div>
+
+        <div class="services-grid"> <!-- Reusing grid for consistent layout -->
+            {% for case in case_studies %}
+            <div class="service-card reveal" style="padding: 0; overflow: hidden;">
+                {% if case.image %}
+                <img src="{{ case.image.url }}" alt="{{ case.title }}"
+                    style="width: 100%; height: 200px; object-fit: cover;">
+                {% else %}
+                <div style="width: 100%; height: 200px; background: #ddd;"></div>
+                {% endif %}
+                <div style="padding: 30px;">
+                    <p style="color: var(--color-secondary); font-size: 0.9rem; font-weight: 600;">{{ case.client_name
+                        }}</p>
+                    <h3>{{ case.title }}</h3>
+                    <p style="font-weight: 700; color: var(--color-navy); margin-top: 10px;">{{ case.result_metric }}
+                    </p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="service-card reveal" style="padding: 0; overflow: hidden;">
+                <div
+                    style="width: 100%; height: 200px; background: #1E293B; display: flex; align-items: center; justify-content: center; color: white;">
+                    Case Study Img</div>
+                <div style="padding: 30px;">
+                    <p style="color: var(--color-secondary); font-size: 0.9rem; font-weight: 600;">AutoTech Pune</p>
+                    <h3>Reduced Recruitment Time by 80%</h3>
+                    <p style="font-weight: 700; color: var(--color-navy); margin-top: 10px;">Saved $50k/month</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

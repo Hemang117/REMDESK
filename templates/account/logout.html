@@ -1,0 +1,31 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}Sign Out | RemDesk{% endblock %}
+
+{% block content %}
+<section style="padding: 8rem 0; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+    <div class="container">
+        <div class="card" style="max-width: 450px; margin: 0 auto; box-shadow: var(--shadow-lg);">
+            <div class="text-center mb-2">
+                <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">{% trans "Sign Out" %}</h1>
+                <p class="text-muted">{% trans "Are you sure you want to sign out?" %}</p>
+            </div>
+
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+
+                <button class="btn btn-primary btn-full mt-2" type="submit">{% trans "Sign Out" %}</button>
+
+                <div class="text-center mt-2">
+                    <a href="{% url 'index' %}" class="btn btn-outline btn-full"
+                        style="margin-top: 1rem; border: none;">{% trans "Cancel" %}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

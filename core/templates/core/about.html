@@ -1,0 +1,152 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}About Us | RemDesk{% endblock %}
+
+{% block content %}
+<section class="page-header text-center" style="padding: 6rem 0 3rem; background: var(--bg-light);">
+    <div class="container">
+        <h1>Our Mission</h1>
+        <p style="max-width: 600px; margin: 0 auto; color: var(--text-muted);">Making global hiring smarter, simpler,
+            and scalable for ambitious companies everywhere.</p>
+    </div>
+</section>
+
+<!-- Story/Intro -->
+<section>
+    <div class="container" style="max-width: 800px;">
+        <h3 class="text-center mb-1">The RemDesk Story</h3>
+        <p class="text-center" style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem;">
+            We recognized a widening gap in the global market: great companies struggle to find verified talent, while
+            exceptional professionals in emerging markets lacked direct access to global opportunities. RemDesk was
+            built to bridge this gap with data, technology, and a human-first approach.
+        </p>
+    </div>
+</section>
+
+<!-- Team -->
+<section style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-title">
+            <h2>Meet The Team</h2>
+        </div>
+
+        <div class="team-grid">
+            <!-- Sarthak -->
+            <div class="card team-card">
+                <div class="team-img-placeholder">
+                    <span>SS</span>
+                </div>
+                <!-- If image available: <img src="..." alt="Sarthak Sharma"> -->
+                <h3>Sarthak Sharma</h3>
+                <p class="team-role">Founder</p>
+                <div class="team-bio">
+                    <p>St. John's University, NY Alumnus. Ex-Growth Marketing Manager at Amber. Bringing US-educated
+                        business acumen and proven growth expertise to transform recruitment.</p>
+                </div>
+                <div class="team-social">
+                    <a href="https://www.linkedin.com/in/sarthaksharma72/" target="_blank"><i
+                            class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+
+            <!-- Hemang -->
+            <div class="card team-card">
+                <div class="team-img-placeholder" style="background: #e0e7ff; color: #4338ca;">
+                    <span>HS</span>
+                </div>
+                <h3>Hemang Saini</h3>
+                <p class="team-role">Founder's Office Associate</p>
+                <div class="team-bio">
+                    <p>Driving strategic initiatives and operational excellence. Focused on scaling RemDesk's internal
+                        processes and partner networks.</p>
+                </div>
+                <div class="team-social">
+                    <a href="https://www.linkedin.com/in/hemang-saini-27a503260/" target="_blank"><i
+                            class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+
+            <!-- Aditya -->
+            <div class="card team-card">
+                <div class="team-img-placeholder" style="background: #ecfdf5; color: #047857;">
+                    <span>AB</span>
+                </div>
+                <h3>Aditya Bhati</h3>
+                <p class="team-role">Partnerships Associate</p>
+                <div class="team-bio">
+                    <p>Building high-impact partnerships and expanding the talent ecosystem. Ensuring client success
+                        through strong relationships.</p>
+                </div>
+                <div class="team-social">
+                    <a href="https://www.linkedin.com/in/aditya-bhati-974aaa226/" target="_blank"><i
+                            class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="text-center">
+    <div class="container">
+        <h2>Ready to work with us?</h2>
+        <p class="mb-2">Join hundreds of companies scaling with RemDesk.</p>
+        <a href="mailto:admin@remdeskjobs.com" class="btn btn-primary">Contact: admin@remdeskjobs.com</a>
+    </div>
+</section>
+
+<style>
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .team-card {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .team-img-placeholder {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: #eff6ff;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .team-role {
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+    }
+
+    .team-bio {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+    }
+
+    .team-social a {
+        color: var(--text-muted);
+        font-size: 1.25rem;
+    }
+
+    .team-social a:hover {
+        color: var(--primary);
+    }
+</style>
+{% endblock %}

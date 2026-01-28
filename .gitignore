@@ -1,0 +1,13 @@
+# General
+.DS_Store
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+*.log

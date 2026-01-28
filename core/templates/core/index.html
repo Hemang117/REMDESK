@@ -1,81 +1,331 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="bg-blob blob-1"></div>
-<div class="bg-blob blob-2"></div>
-
 <!-- Hero Section -->
-<section class="hero" style="min-height: 90vh; display: flex; align-items: center;">
-    <div class="container text-center flex-column items-center">
-        <h1 class="mb-2">The Future of Global Hiring <br>Starts in India.</h1>
-        <p class="mb-2" style="font-size: 1.25rem;">
-            RemDesk connects world-class startups with the top 5% of Indian talent.
-            Pre-vetted, compliant, and ready to deploy in 3 days.
-        </p>
-        <div class="nav-actions gap-2">
-            <a href="{% url 'employers' %}" class="btn btn-primary"
-                style="padding: 1rem 2.5rem; font-size: 1.1rem;">Start Hiring</a>
-            <a href="{% url 'careers' %}" class="btn btn-secondary"
-                style="padding: 1rem 2.5rem; font-size: 1.1rem;">Join as Talent</a>
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="hero-title">Redefining Remote Hiring <br><span class="text-primary">Smarter. Simpler.
+                Scalable.</span></h1>
+        <p class="hero-subtitle">RemDesk helps you build world-class global teams with pre-vetted Indian professionals.
+            Save 40-70% on costs without compromising quality.</p>
+        <div class="hero-actions">
+            <a href="{% url 'contact' %}" class="btn btn-primary">Start Hiring</a>
+            <a href="{% url 'careers' %}" class="btn btn-outline">Join as Talent</a>
         </div>
 
-        <div class="mt-5" style="display: flex; gap: 4rem; opacity: 0.7;">
-            <div>
-                <h3 style="margin:0; font-size: 2.5rem; color:white;">5M+</h3>
-                <span style="font-size: 0.9rem;">Professionals</span>
-            </div>
-            <div>
-                <h3 style="margin:0; font-size: 2.5rem; color:white;">70%</h3>
-                <span style="font-size: 0.9rem;">Cost Savings</span>
-            </div>
-            <div>
-                <h3 style="margin:0; font-size: 2.5rem; color:white;">48h</h3>
-                <span style="font-size: 0.9rem;">Placement Speed</span>
+        <!-- Trust Badges (Optional/Placeholder) -->
+        <div style="margin-top: 3rem; opacity: 0.7;">
+            <p style="font-size: 0.875rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">Trusted
+                by innovators</p>
+            <div style="display: flex; gap: 2rem; justify-content: center; filter: grayscale(1);">
+                <i class="fas fa-layer-group fa-2x"></i>
+                <i class="fas fa-rocket fa-2x"></i>
+                <i class="fas fa-chart-pie fa-2x"></i>
+                <i class="fas fa-building fa-2x"></i>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Value Prop (Problem/Solution) -->
+<!-- The Gap Section -->
+<section style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-title">
+            <span>The Challenge</span>
+            <h2>Why is global hiring so hard?</h2>
+        </div>
+        <div class="grid-3">
+            <div class="card">
+                <div class="icon-box"><i class="fas fa-search-minus"></i></div>
+                <h3>Fragmented Talent</h3>
+                <p>Finding verified global talent is like finding a needle in a haystack. Verification is inconsistent
+                    and risky.</p>
+            </div>
+            <div class="card">
+                <div class="icon-box"><i class="fas fa-file-contract"></i></div>
+                <h3>Compliance Nightmares</h3>
+                <p>Navigating international labor laws, contracts, and payments typically requires a legal team.</p>
+            </div>
+            <div class="card">
+                <div class="icon-box"><i class="fas fa-user-clock"></i></div>
+                <h3>Lack of Support</h3>
+                <p>Traditional agencies disappear after placement, leaving you to manage retention and performance
+                    alone.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3-Step Process -->
 <section>
     <div class="container">
-        <div class="bento-grid" style="grid-template-columns: 1fr 1fr;">
-            <div class="glass-card">
-                <h2 class="text-gradient">The Old Way</h2>
-                <ul style="list-style: none; margin-top: 1rem;">
-                    <li style="margin-bottom: 1rem; color: #f87171;">✖ Fragmented hiring across platforms</li>
-                    <li style="margin-bottom: 1rem; color: #f87171;">✖ Unreliable verification & skills</li>
-                    <li style="margin-bottom: 1rem; color: #f87171;">✖ Compliance nightmares</li>
-                </ul>
+        <div class="section-title">
+            <span>Our Solution</span>
+            <h2>The RemDesk 3-Step Process</h2>
+            <p>We've streamlined global hiring into a predictable, high-quality engine.</p>
+        </div>
+
+        <div class="process-steps">
+            <!-- Step 1 -->
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <h3>Understand Requirements</h3>
+                <p>We align with your role needs, culture expectations, and hiring goals to ensure long-term success. No
+                    generic JD matching.</p>
             </div>
-            <div class="glass-card" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
-                <h2 class="text-gradient">The RemDesk Way</h2>
-                <ul style="list-style: none; margin-top: 1rem;">
-                    <li style="margin-bottom: 1rem; color: #4ade80;">✔ AI + Human Vetted (Top 5%)</li>
-                    <li style="margin-bottom: 1rem; color: #4ade80;">✔ Full Legal & Payroll handling</li>
-                    <li style="margin-bottom: 1rem; color: #4ade80;">✔ 24/7 Dedicated Support</li>
-                </ul>
+            <!-- Step 2 -->
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <h3>Screening & Vetting</h3>
+                <p>Candidates pass AI pre-vetting, human screening, and our <strong>Standardized Score</strong> check
+                    (Tech, Culture, Comms).</p>
+            </div>
+            <!-- Step 3 -->
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <h3>Interview & Select</h3>
+                <p>You meet only the top 5% of shortlisted candidates. Choose your ideal hire and start onboarding
+                    immediately.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Call to Action -->
-<section class="text-center">
+<!-- Stats Section -->
+<section class="bg-dark-soft-pattern">
     <div class="container">
-        <h2 class="mb-2">Choose Your Path</h2>
-        <div class="bento-grid">
-            <div class="glass-card">
-                <h3>For Companies</h3>
-                <p>Scale your team with elite remote developers, designers, and support staff.</p>
-                <a href="{% url 'employers' %}" class="btn btn-primary mt-5">Hire Talent &rarr;</a>
+        <div class="grid-2 align-center">
+            <div>
+                <h2 style="color: white">India by the Numbers</h2>
+                <p style="color: #CBD5E1; margin-bottom: 2rem; font-size: 1.1rem;">Leverage the world's fastest-growing
+                    talent
+                    hub. A young, digitally fluent workforce ready to scale with you.</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary"
+                    style="background: white; color: var(--primary);">Explore Talent</a>
             </div>
-            <div class="glass-card">
-                <h3>For Professionals</h3>
-                <p>Work with global brands from the comfort of your home. Premium pay, global exposure.</p>
-                <a href="{% url 'careers' %}" class="btn btn-secondary mt-5">Apply Now &rarr;</a>
+            <div class="stats-grid-cols">
+                <div class="stat-box">
+                    <span class="stat-num">5M+</span>
+                    <span class="stat-label">Skilled Professionals</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num">70%</span>
+                    <span class="stat-label">Cost Advantage</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num">1.5M</span>
+                    <span class="stat-label">Grads Yearly</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num">65%</span>
+                    <span class="stat-label">Under Age 35</span>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Roles Section -->
+<section>
+    <div class="container">
+        <div class="section-title">
+            <span>Capabilities</span>
+            <h2>Roles We Hire For</h2>
+        </div>
+
+        <div class="grid-3">
+            {% for category in role_categories %}
+            <div class="card role-card">
+                <div class="role-icon"><i class="{{ category.icon_class }}"></i></div>
+                <h3>{{ category.name }}</h3>
+                <p>{{ category.description }}</p>
+            </div>
+            {% empty %}
+            <!-- Fallbacks if DB is empty -->
+            <div class="card role-card">
+                <div class="role-icon"><i class="fas fa-code"></i></div>
+                <h3>Tech Development</h3>
+                <p>Full-stack, Backend, Frontend, DevOps, and more.</p>
+            </div>
+            <div class="card role-card">
+                <div class="role-icon"><i class="fas fa-bullhorn"></i></div>
+                <h3>Sales & Marketing</h3>
+                <p>SDRs, Account Executives, Digital Marketers.</p>
+            </div>
+            <div class="card role-card">
+                <div class="role-icon"><i class="fas fa-headset"></i></div>
+                <h3>Customer Support</h3>
+                <p>24/7 Support reps, success managers.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'services' %}" class="btn btn-outline">View All Roles & Services</a>
+        </div>
+    </div>
+</section>
+
+<!-- Proof/Why Choose Us -->
+<section style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-title">
+            <h2>Why companies choose RemDesk</h2>
+        </div>
+        <div class="grid-4">
+            <div class="feature-item">
+                <i class="fas fa-bolt text-primary fa-2x mb-1"></i>
+                <h4>Faster Hiring</h4>
+                <p class="text-sm">3-7 days to shortlist. 90% roles filled within 2 weeks.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-check-circle text-primary fa-2x mb-1"></i>
+                <h4>Verified Talent</h4>
+                <p class="text-sm">Top 5% acceptance rate. Rigorous 3-step vetting.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-headset text-primary fa-2x mb-1"></i>
+                <h4>Dedicated Support</h4>
+                <p class="text-sm">Single point of contact for all your needs.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-tag text-primary fa-2x mb-1"></i>
+                <h4>Affordable</h4>
+                <p class="text-sm">30% lower fees than agencies. 100% free replacement.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Banner -->
+<section class="cta-banner">
+    <div class="container text-center">
+        <h2 style="color: white; margin-bottom: 1.5rem;">Ready to build your dream team?</h2>
+        <p
+            style="color: rgba(255,255,255,0.9); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Get started today and receive your first shortlist within 3-7 days. Risk-free hiring with our 60-day
+            replacement guarantee.
+        </p>
+        <a href="{% url 'contact' %}" class="btn btn-primary" style="background: white; color: var(--primary);">Share
+            Requirements</a>
+    </div>
+</section>
+
+<style>
+    /* Specific Index Styles */
+    .hero-section {
+        padding: 8rem 0 5rem;
+        background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.1), transparent 40%),
+            radial-gradient(circle at bottom left, rgba(245, 158, 11, 0.05), transparent 40%);
+    }
+
+    .hero-title {
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        max-width: 700px;
+        margin: 0 auto 2.5rem;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 3rem;
+    }
+
+    .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+    }
+
+    @media (max-width: 768px) {
+        .grid-2 {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+    }
+
+    .icon-box {
+        width: 50px;
+        height: 50px;
+        background: rgba(37, 99, 235, 0.1);
+        color: var(--primary);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .process-steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .step-card {
+        position: relative;
+        padding: 2rem;
+        border-left: 3px solid var(--border-color);
+    }
+
+    .step-number {
+        font-size: 4rem;
+        font-weight: 800;
+        color: rgba(0, 0, 0, 0.05);
+        position: absolute;
+        top: 0;
+        left: 2rem;
+        line-height: 1;
+    }
+
+    .stats-grid-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .stat-box {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+
+    .stat-num {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--accent);
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        opacity: 0.9;
+    }
+
+    .cta-banner {
+        background: var(--primary);
+        padding: 5rem 0;
+        color: white;
+    }
+</style>
 {% endblock %}
