@@ -168,11 +168,40 @@
         </div>
     </footer>
 
+    <!-- Mobile Menu Drawer -->
+    <div id="mobile-menu-drawer" class="mobile-menu-drawer">
+        <div class="mobile-menu-header">
+            <a href="{% url 'index' %}" class="logo">Rem<span>Desk</span></a>
+            <button class="mobile-menu-close" onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+        </div>
+        <ul class="mobile-nav-links">
+            <li><a href="{% url 'services' %}">Services</a></li>
+            <li><a href="{% url 'how_it_works' %}">How It Works</a></li>
+            <li><a href="{% url 'pricing' %}">Pricing</a></li>
+            <li><a href="{% url 'about' %}">About Us</a></li>
+            <li><a href="{% url 'careers' %}">Join Us</a></li>
+        </ul>
+        <div class="mobile-nav-actions">
+            {% if user.is_authenticated %}
+            <a href="{% url 'account_logout' %}" class="btn btn-outline">Logout</a>
+            {% else %}
+            <a href="{% url 'account_login' %}" class="btn btn-outline">Login</a>
+            <a href="{% url 'account_signup' %}" class="btn btn-primary">Sign Up</a>
+            {% endif %}
+        </div>
+    </div>
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay" onclick="toggleMobileMenu()"></div>
+
     <!-- Mobile Menu Script -->
     <script>
         function toggleMobileMenu() {
-            // Simple toggle for now, can be enhanced
-            alert("Mobile menu would slide out here. Implementation pending.");
+            const drawer = document.getElementById('mobile-menu-drawer');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            const body = document.body;
+
+            drawer.classList.toggle('active');
+            overlay.classList.toggle('active');
+            body.classList.toggle('no-scroll');
         }
 
         // Auto-dismiss messages
