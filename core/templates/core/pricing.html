@@ -346,6 +346,33 @@
     .toggle-checkbox:checked~.toggle-track #label-india:hover {
         color: var(--primary-dark);
     }
+
+    /* Mobile Optimization for Toggle */
+    @media (max-width: 600px) {
+        .pricing-toggle-wrapper {
+            width: 100%;
+            padding: 0 1rem;
+            /* Ensure it doesn't touch edges */
+        }
+
+        .toggle-container {
+            width: 100%;
+            display: flex;
+        }
+
+        .toggle-track {
+            width: 100%;
+        }
+
+        .toggle-option {
+            min-width: 50%;
+            width: 50%;
+            padding: 10px 2px;
+            /* Minimal side padding */
+            font-size: 0.8rem;
+            /* Smaller text to fit "Domestic Hiring (India)" */
+        }
+    }
 </style>
 
 <script>
