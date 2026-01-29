@@ -249,6 +249,8 @@
         grid-template-columns: 1.5fr 1fr 1fr;
         padding: 1.5rem;
         border-bottom: 1px solid var(--border-color);
+        align-items: center;
+        /* Vertically center content */
     }
 
     .comp-row:last-child {
@@ -261,8 +263,14 @@
 
     @media (max-width: 600px) {
         .comp-row {
-            font-size: 0.9rem;
-            padding: 1rem;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            /* More balanced columns for mobile */
+            font-size: 0.8rem;
+            /* Smaller font to prevent wrapping */
+            padding: 1rem 0.5rem;
+            /* Less padding to give text room */
+            gap: 2px;
+            /* Small gap to separate columns visually without wasting space */
         }
     }
 
