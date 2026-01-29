@@ -532,16 +532,19 @@ footer {
 
 /* Infinite Scroll Marquee */
 .marquee-container {
-    background: var(--primary);
+    background: rgba(255, 255, 255, 0.05);
+    /* Subtle dark container */
     padding: 1rem 0;
     overflow: hidden;
     white-space: nowrap;
     position: relative;
     z-index: 5;
     transform: none;
-    margin-top: -2rem;
-    margin-bottom: 4rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin-top: 0;
+    /* Remove overlap */
+    margin-bottom: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .marquee-content {
