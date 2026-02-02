@@ -210,11 +210,22 @@ CSP_STYLE_SRC = [
     "https://fonts.googleapis.com"
 ]
 
-# Scripts: STRICTER - No unsafe-inline. Must have Nonce.
+# Scripts: STRICTER - No unsafe-inline. Must have Nonce. 'strict-dynamic' allows trusted scripts to load dependencies.
 CSP_SCRIPT_SRC = [
     "'self'", 
+    "'strict-dynamic'",
     "https://cdnjs.cloudflare.com",
-    "https://*.vercel.app" # Vercel Analytics
+    "https://*.vercel.app" 
+]
+
+# Base URI: Prevent injection of <base> tags
+CSP_BASE_URI = ["'self'"]
+
+# Connect: Allow sending data (Critical for Vercel Speed Insights)
+CSP_CONNECT_SRC = [
+    "'self'", 
+    "https://*.vercel-insights.com",
+    "https://*.vercel-analytics.com"
 ]
 
 # Fonts: Allow self, Google Fonts data
