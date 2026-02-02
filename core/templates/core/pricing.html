@@ -383,7 +383,7 @@
     }
 </style>
 
-<script>
+<script nonce="{{ request.csp_nonce }}">
     document.addEventListener('DOMContentLoaded', function () {
         const toggle = document.getElementById('pricing-toggle');
         const termElements = document.querySelectorAll('.dynamic-term');

@@ -195,10 +195,14 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # 2. Content Security Policy (CSP)
-# Controls where scripts/styles/images can load from
+MIDDLEWARE += ['csp.middleware.CSPMiddleware']
+
+# Enable Nonce for Scripts
+CSP_INCLUDE_NONCE_IN = ['script-src']
+
 CSP_DEFAULT_SRC = ["'self'"]
 
-# Styling: Allow self, unsafe-inline (for dynamic styles), standard CDNs
+# Styling: Allow self, unsafe-inline (needed for dynamic styles), standard CDNs
 CSP_STYLE_SRC = [
     "'self'", 
     "'unsafe-inline'", 
@@ -206,12 +210,11 @@ CSP_STYLE_SRC = [
     "https://fonts.googleapis.com"
 ]
 
-# Scripts: Allow self, unsafe-inline (for mobile menu etc), standard CDNs
+# Scripts: STRICTER - No unsafe-inline. Must have Nonce.
 CSP_SCRIPT_SRC = [
     "'self'", 
-    "'unsafe-inline'", 
     "https://cdnjs.cloudflare.com",
-    "https://*.vercel.app" # Vercel Analytics if used
+    "https://*.vercel.app" # Vercel Analytics
 ]
 
 # Fonts: Allow self, Google Fonts data
@@ -222,7 +225,7 @@ CSP_FONT_SRC = [
     "data:"
 ]
 
-# Images: Allow self, base64, and any HTTPS (often needed for user uploads/avatars)
+# Images: Allow self, base64, and any HTTPS
 CSP_IMG_SRC = [
     "'self'", 
     "data:", 
