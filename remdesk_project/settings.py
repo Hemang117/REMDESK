@@ -67,6 +67,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",
     "csp.middleware.CSPMiddleware",
+    # Safe Caching: Prevent HTML caching so Nonce is always fresh
+    "core.middleware.SecurityHeadersMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = [
