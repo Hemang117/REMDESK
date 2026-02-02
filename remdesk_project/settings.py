@@ -66,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",
+    "csp.middleware.CSPMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -181,3 +182,49 @@ else:
     EMAIL_USE_TLS = True
     EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+# Security Hardening (PageSpeed Insights Fixes)
+# ---------------------------------------------------------
+
+# 1. Strict Transport Security (HSTS)
+# Forces browsers to use HTTPS for 1 year
+if not DEBUG:
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# 2. Content Security Policy (CSP)
+# Controls where scripts/styles/images can load from
+CSP_DEFAULT_SRC = ["'self'"]
+
+# Styling: Allow self, unsafe-inline (for dynamic styles), standard CDNs
+CSP_STYLE_SRC = [
+    "'self'", 
+    "'unsafe-inline'", 
+    "https://cdnjs.cloudflare.com", 
+    "https://fonts.googleapis.com"
+]
+
+# Scripts: Allow self, unsafe-inline (for mobile menu etc), standard CDNs
+CSP_SCRIPT_SRC = [
+    "'self'", 
+    "'unsafe-inline'", 
+    "https://cdnjs.cloudflare.com",
+    "https://*.vercel.app" # Vercel Analytics if used
+]
+
+# Fonts: Allow self, Google Fonts data
+CSP_FONT_SRC = [
+    "'self'", 
+    "https://fonts.gstatic.com", 
+    "https://cdnjs.cloudflare.com", 
+    "data:"
+]
+
+# Images: Allow self, base64, and any HTTPS (often needed for user uploads/avatars)
+CSP_IMG_SRC = [
+    "'self'", 
+    "data:", 
+    "https:",
+]
