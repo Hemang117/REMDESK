@@ -178,7 +178,7 @@
     <div id="mobile-menu-drawer" class="mobile-menu-drawer">
         <div class="mobile-menu-header">
             <a href="{% url 'index' %}" class="logo">Rem<span>Desk</span></a>
-            <button class="mobile-menu-close" onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+            <button class="mobile-menu-close" id="mobile-menu-close"><i class="fas fa-times"></i></button>
         </div>
         <ul class="mobile-nav-links">
             <li><a href="{% url 'services' %}">Services</a></li>
@@ -196,19 +196,27 @@
             {% endif %}
         </div>
     </div>
-    <div id="mobile-menu-overlay" class="mobile-menu-overlay" onclick="toggleMobileMenu()"></div>
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
 
     <!-- Mobile Menu Script -->
     <script nonce="{{ request.csp_nonce }}">
-        function toggleMobileMenu() {
-            const drawer = document.getElementById('mobile-menu-drawer');
+        document.addEventListener('DOMContentLoaded', function () {
+            const openBtn = document.getElementById('mobile-menu-open');
+            const closeBtn = document.getElementById('mobile-menu-close');
             const overlay = document.getElementById('mobile-menu-overlay');
+            const drawer = document.getElementById('mobile-menu-drawer');
             const body = document.body;
 
-            drawer.classList.toggle('active');
-            overlay.classList.toggle('active');
-            body.classList.toggle('no-scroll');
-        }
+            function toggleMenu() {
+                drawer.classList.toggle('active');
+                overlay.classList.toggle('active');
+                body.classList.toggle('no-scroll');
+            }
+
+            if (openBtn) openBtn.addEventListener('click', toggleMenu);
+            if (closeBtn) closeBtn.addEventListener('click', toggleMenu);
+            if (overlay) overlay.addEventListener('click', toggleMenu);
+        });
 
         // Auto-dismiss messages
         setTimeout(function () {
