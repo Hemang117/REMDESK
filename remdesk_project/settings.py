@@ -86,6 +86,11 @@ ACCOUNT_EMAIL_VERIFICATION = 'none' # For development simplicity
 # Provider Config (Placeholders)
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+        'APP': {
+            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
+            'secret': os.getenv('GOOGLE_CLIENT_SECRET'),
+            'key': ''
+        },
         'SCOPE': [
             'profile',
             'email',
@@ -95,6 +100,9 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+# Social Login: Skip the confirmation page and login immediately
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 ROOT_URLCONF = 'remdesk_project.urls'
 
