@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    # Cloudinary storage (Must be before staticfiles)
+    'cloudinary_storage',
     'django.contrib.staticfiles',
     'django.contrib.sites',  # Required for allauth
     
@@ -70,7 +72,7 @@ INSTALLED_APPS = [
     'talenthub',
 
     # Cloud Storage for file uploads (resumes)
-    'cloudinary_storage',
+    # 'cloudinary_storage' moved to top
     'cloudinary',
 ]
 
@@ -83,7 +85,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.sites.middleware.CurrentSiteMiddleware', # Required for allauth site resolution
+    # CurrentSiteMiddleware removed - causing 500s. Rely on SITE_ID=1
     "allauth.account.middleware.AccountMiddleware",
     "csp.middleware.CSPMiddleware",
     # Safe Caching: Prevent HTML caching so Nonce is always fresh
@@ -108,7 +110,6 @@ SOCIALACCOUNT_PROVIDERS = {
          'APP': {
             'client_id': os.getenv('GOOGLE_CLIENT_ID'),
             'secret': os.getenv('GOOGLE_CLIENT_SECRET'),
-            'key': ''
         },
         'SCOPE': [
             'profile',
