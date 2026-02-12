@@ -1,0 +1,223 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}My Profile | RemDesk{% endblock %}
+
+{% block content %}
+<section class="section-padding" style="margin-top: 4rem;">
+    <div class="container" style="max-width: 850px; margin: 0 auto;">
+
+        <!-- ============================================
+             1. HERO HEADER — Glassmorphism + Avatar
+             ============================================ -->
+        <div class="dashboard-hero animate-in stagger-1">
+            <div class="dashboard-hero-content">
+                <!-- Avatar -->
+                <div class="avatar-circle">
+                    {% if request.user.first_name and request.user.last_name %}
+                    {{ request.user.first_name.0 }}{{ request.user.last_name.0 }}
+                    {% else %}
+                    {{ request.user.username.0|upper }}
+                    {% endif %}
+                </div>
+
+                <!-- Info -->
+                <div class="dashboard-hero-info">
+                    <h1>{% firstof request.user.get_full_name request.user.username %}</h1>
+                    <p>{{ profile.current_role|default:"No role set yet" }} &middot; {{ profile.experience_years }} yr{{ profile.experience_years|pluralize }} experience</p>
+                </div>
+
+                <!-- Actions: Ring + Edit -->
+                <div class="dashboard-hero-actions">
+                    <!-- Progress Ring -->
+                    <div class="progress-ring-container" title="Profile {{ completeness }}% complete">
+                        <svg width="64" height="64">
+                            <circle class="progress-ring-bg" cx="32" cy="32" r="28"></circle>
+                            <circle class="progress-ring-fill" cx="32" cy="32" r="28" stroke-dasharray="175.93"
+                                stroke-dashoffset="175.93" data-target="{{ completeness }}"
+                                data-color="{{ ring_color }}">
+                            </circle>
+                        </svg>
+                        <span class="progress-ring-text">{{ completeness }}%</span>
+                    </div>
+
+                    <a href="{% url 'profile_edit' %}" class="btn-ghost">
+                        <i class="fas fa-pen"></i> Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             2. NUDGE CARDS — Dynamic Prompts
+             ============================================ -->
+        {% if completeness < 100 %} <div class="animate-in stagger-2" style="margin-bottom: 1.5rem;">
+            {% if not profile.resume %}
+            <div class="nudge-card nudge-warning">
+                <i class="fas fa-file-upload"></i>
+                <span>Upload your resume — employers review profiles with resumes 3× more often.</span>
+            </div>
+            {% endif %}
+
+            {% if not profile.linkedin_url %}
+            <div class="nudge-card nudge-info">
+                <i class="fab fa-linkedin"></i>
+                <span>Link your LinkedIn to increase profile visibility.</span>
+            </div>
+            {% endif %}
+
+            {% if not profile.skills %}
+            <div class="nudge-card nudge-info">
+                <i class="fas fa-star"></i>
+                <span>Add your top skills so we can match you with the right roles.</span>
+            </div>
+            {% endif %}
+
+            {% if not profile.current_role %}
+            <div class="nudge-card nudge-info">
+                <i class="fas fa-briefcase"></i>
+                <span>Set your current role to help employers understand your background.</span>
+            </div>
+            {% endif %}
+    </div>
+    {% else %}
+    <div class="animate-in stagger-2" style="margin-bottom: 1.5rem;">
+        <div class="nudge-card nudge-success">
+            <i class="fas fa-check-circle"></i>
+            <span>Your profile is looking great! You're fully visible to employers. 🎉</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ============================================
+             3. JOB SEARCH STATUS
+             ============================================ -->
+    <div class="status-section animate-in stagger-2">
+        <div>
+            <h4 style="margin-bottom: 0.25rem; color: var(--text-main); font-size: 0.95rem;">Job Search Status</h4>
+            <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">
+                {% if profile.is_looking_for_job %}
+                Visible to recruiters & open to opportunities.
+                {% else %}
+                Hidden from recruiter searches.
+                {% endif %}
+            </p>
+        </div>
+        {% if profile.is_looking_for_job %}
+        <span class="status-badge active"><i class="fas fa-check-circle"></i> Open to Work</span>
+        {% else %}
+        <span class="status-badge inactive"><i class="fas fa-pause-circle"></i> Not Looking</span>
+        {% endif %}
+    </div>
+
+    <!-- ============================================
+             4. DETAILS GRID — Personal + Professional
+             ============================================ -->
+    <div class="dashboard-grid animate-in stagger-3">
+        <!-- Personal Info Card -->
+        <div class="dashboard-card">
+            <h3><i class="fas fa-user" style="margin-right: 0.5rem;"></i> Personal Info</h3>
+            <p><strong>Full Name</strong> {{ request.user.first_name }} {{ request.user.last_name }}</p>
+            <p><strong>Email</strong> {{ request.user.email }}</p>
+            <p><strong>Phone</strong> {{ profile.phone_number|default:"Not set" }}</p>
+        </div>
+
+        <!-- Professional Card -->
+        <div class="dashboard-card">
+            <h3><i class="fas fa-briefcase" style="margin-right: 0.5rem;"></i> Professional</h3>
+            <p><strong>Current Role</strong> {{ profile.current_role|default:"Not set" }}</p>
+            <p><strong>Experience</strong> {{ profile.experience_years }} Year{{ profile.experience_years|pluralize }}
+            </p>
+        </div>
+    </div>
+
+    <!-- ============================================
+             5. SKILLS SECTION
+             ============================================ -->
+    <div class="dashboard-card animate-in stagger-4" style="margin-bottom: 1.5rem;">
+        <h3><i class="fas fa-star" style="margin-right: 0.5rem;"></i> Top Skills</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            {% if profile.skills_list %}
+            {% for skill in profile.skills_list %}
+            <span class="skill-tag">{{ skill }}</span>
+            {% endfor %}
+            {% else %}
+            <p style="color: var(--text-light); font-style: italic; margin: 0;">No skills added yet — <a
+                    href="{% url 'profile_edit' %}" style="color: var(--primary);">add some now</a>.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ============================================
+             6. LINKS — Mini Cards
+             ============================================ -->
+    <div class="link-grid animate-in stagger-5">
+        <!-- LinkedIn -->
+        {% if profile.linkedin_url %}
+        <a href="{{ profile.linkedin_url }}" target="_blank" class="link-card">
+            <i class="fab fa-linkedin"></i>
+            <span class="link-label">LinkedIn</span>
+            <span class="link-value">View Profile <i class="fas fa-external-link-alt"
+                    style="font-size: 0.7rem;"></i></span>
+        </a>
+        {% else %}
+        <div class="link-card link-empty">
+            <i class="fab fa-linkedin"></i>
+            <span class="link-label">LinkedIn</span>
+            <span class="link-value">Not linked</span>
+        </div>
+        {% endif %}
+
+        <!-- Portfolio -->
+        {% if profile.portfolio_url %}
+        <a href="{{ profile.portfolio_url }}" target="_blank" class="link-card">
+            <i class="fas fa-globe"></i>
+            <span class="link-label">Portfolio</span>
+            <span class="link-value">View Portfolio <i class="fas fa-external-link-alt"
+                    style="font-size: 0.7rem;"></i></span>
+        </a>
+        {% else %}
+        <div class="link-card link-empty">
+            <i class="fas fa-globe"></i>
+            <span class="link-label">Portfolio</span>
+            <span class="link-value">Not linked</span>
+        </div>
+        {% endif %}
+
+        <!-- Resume -->
+        {% if profile.resume %}
+        <a href="{{ profile.resume.url }}" target="_blank" class="link-card">
+            <i class="fas fa-file-alt"></i>
+            <span class="link-label">Resume</span>
+            <span class="link-value">Download <i class="fas fa-download" style="font-size: 0.7rem;"></i></span>
+        </a>
+        {% else %}
+        <div class="link-card link-empty">
+            <i class="fas fa-file-alt"></i>
+            <span class="link-label">Resume</span>
+            <span class="link-value">Not uploaded</span>
+        </div>
+        {% endif %}
+    </div>
+
+    </div>
+</section>
+
+<!-- Progress Ring Animation Script -->
+<script nonce="{{ request.csp_nonce }}">
+    document.addEventListener('DOMContentLoaded', function () {
+        const ring = document.querySelector('.progress-ring-fill');
+        if (ring) {
+            const circumference = 2 * Math.PI * 28; // r=28
+            const target = parseInt(ring.getAttribute('data-target')) || 0;
+            const offset = circumference - (target / 100) * circumference;
+            const color = ring.getAttribute('data-color') || '#EF4444';
+            ring.style.stroke = color;
+            // Animate after a short delay for visual effect
+            setTimeout(function () {
+                ring.style.strokeDashoffset = offset;
+            }, 400);
+        }
+    });
+</script>
+{% endblock %}

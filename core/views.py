@@ -1,7 +1,147 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import LeadForm, CandidateForm, ContactForm
+from .forms import LeadForm, CandidateForm, ContactForm, UserProfileForm
 from .models import Lead, RoleCategory, Service, Testimonial, TeamMember
+
+@login_required
+def profile_dashboard(request):
+    profile = request.user.profile
+    
+    # Calculate approximate profile completeness
+    completeness = 0
+    if profile.current_role: completeness += 20
+    if profile.skills: completeness += 20
+    if profile.experience_years > 0: completeness += 20
+    if profile.resume: completeness += 20
+    if profile.linkedin_url or profile.portfolio_url: completeness += 20
+    
+    # Determine progress ring color
+    if completeness >= 80:
+        ring_color = '#10B981'  # Green
+    elif completeness >= 40:
+        ring_color = '#F59E0B'  # Amber
+    else:
+        ring_color = '#EF4444'  # Red
+
+    context = {
+        'profile': profile,
+        'completeness': completeness,
+        'ring_color': ring_color,
+    }
+    return render(request, 'core/profile/dashboard.html', context)
+
+@login_required
+def profile_edit(request):
+    profile = request.user.profile
+    
+    # QA Check / Rate Limiting: 2-Hour Cooldown
+    # Allow updates only if 2 hours passed since last update
+    # Exception: If the profile is brand new (created within last 5 mins), allow corrections.
+    from django.utils import timezone
+    from datetime import timedelta
+    
+    now = timezone.now()
+    two_hours_ago = now - timedelta(hours=2)
+    five_mins_ago = now - timedelta(minutes=5)
+    
+    # If updated recently AND it wasn't just created (grace period), block update.
+    # Note: user.is_superuser can bypass.
+    if request.method == 'POST' and not request.user.is_superuser:
+        if profile.updated_at > two_hours_ago and profile.created_at < five_mins_ago:
+            # Calculate remaining time
+            next_update = profile.updated_at + timedelta(hours=2)
+            remaining_minutes = int((next_update - now).total_seconds() / 60)
+            messages.error(request, f"You can only update your profile once every 2 hours. Please try again in {remaining_minutes} minutes.")
+            return redirect('profile_dashboard')
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
+        if form.is_valid():
+            uploaded_file = request.FILES.get('resume')
+            if uploaded_file:
+                if uploaded_file.size > 5 * 1024 * 1024:
+                    messages.error(request, "File too large. Please upload under 5MB.")
+                    return render(request, 'core/profile/edit.html', {'form': form})
+                
+                # Email the resume to HR as well
+                from django.core.mail import EmailMessage
+                import os
+                try:
+                    admin_email = os.getenv('EMAIL_HOST_USER', 'admin@remdeskjobs.com')
+                    email = EmailMessage(
+                        subject=f"Updated Resume: {request.user.first_name} {request.user.last_name}",
+                        body=f"User {request.user.username} updated their profile resume.\n\nSee attachment.",
+                        from_email=None,
+                        to=[admin_email],
+                    )
+                    email.attach(uploaded_file.name, uploaded_file.read(), uploaded_file.content_type)
+                    email.send()
+                    # Reset file cursor so Cloudinary can re-read and upload it
+                    uploaded_file.seek(0)
+                    messages.info(request, "Resume sent to HR successfully!")
+                except Exception as e:
+                    print(f"Resume email failed: {e}")
+                    # Reset file cursor even if email fails, so Cloudinary can still save
+                    uploaded_file.seek(0)
+
+            # Cloudinary handles file storage — no filesystem workaround needed
+            form.save()
+            
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('profile_dashboard')
+    else:
+        form = UserProfileForm(instance=profile, user=request.user)
+    
+    return render(request, 'core/profile/edit.html', {'form': form})
+
+def careers(request):
+    # Smart Redirect: If logged in, go to dashboard or edit profile
+    if request.user.is_authenticated:
+        if hasattr(request.user, 'profile'):
+            # If they are "looking for a job", maybe dashboard? 
+            # Or if they have a profile, we assume they apply via profile/1-click later.
+            # For now, let's redirect to dashboard to avoid duplicate "Guest" applications.
+            return redirect('profile_dashboard')
+
+    if request.method == 'POST':
+        form = CandidateForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_file = request.FILES.get('resume')
+            if uploaded_file:
+                if uploaded_file.size > 5 * 1024 * 1024:
+                    messages.error(request, "File too large. Please upload under 5MB.")
+                    return render(request, 'core/careers.html', {'form': form})
+            
+            # Email the resume to HR
+            if uploaded_file:
+                from django.core.mail import EmailMessage
+                import os
+                
+                try:
+                    admin_email = os.getenv('EMAIL_HOST_USER', 'admin@remdeskjobs.com')
+                    email = EmailMessage(
+                        subject=f"New Resume: {form.cleaned_data['full_name']}",
+                        body=f"A new candidate applied.\n\nName: {form.cleaned_data['full_name']}\nRole: {form.cleaned_data['primary_skill']}\nExperience: {form.cleaned_data['experience_years']} years\n\nSee attachment for resume.",
+                        from_email=None, 
+                        to=[admin_email], 
+                    )
+                    email.attach(uploaded_file.name, uploaded_file.read(), uploaded_file.content_type)
+                    email.send()
+                    # Reset file cursor so Cloudinary can re-read and upload it
+                    uploaded_file.seek(0)
+                except Exception as e:
+                    print(f"Resume email failed: {e}")
+                    uploaded_file.seek(0)
+            
+            # Cloudinary handles file storage — no filesystem workaround needed
+            form.save()
+            
+            messages.success(request, 'Application submitted! We will be in touch.')
+            return redirect('careers')
+    else:
+        form = CandidateForm()
+    return render(request, 'core/careers.html', {'form': form})
 
 def index(request):
     lead_form = LeadForm()
@@ -66,26 +206,20 @@ def submit_lead(request):
     return redirect('index')
 
 def careers(request):
+    # Smart Redirect: If logged in, send them to their dashboard
+    if request.user.is_authenticated:
+        return redirect('profile_dashboard')
+
     if request.method == 'POST':
         form = CandidateForm(request.POST, request.FILES)
         if form.is_valid():
-            # Vercel filesystem is read-only, so we cannot save files to disk.
-            # Workaround: Save the data, but skip the file save, and try to email it.
-            application = form.save(commit=False)
-            
             uploaded_file = request.FILES.get('resume')
             if uploaded_file:
-                # Verify file size (limit to 5MB to be safe for email)
                 if uploaded_file.size > 5 * 1024 * 1024:
                     messages.error(request, "File too large. Please upload under 5MB.")
                     return render(request, 'core/careers.html', {'form': form})
-                    
-                # Prevent Django from trying to write to disk
-                application.resume = None 
             
-            application.save()
-            
-            # Attempt to email the resume
+            # Email the resume to HR
             if uploaded_file:
                 from django.core.mail import EmailMessage
                 import os
@@ -93,17 +227,21 @@ def careers(request):
                 try:
                     admin_email = os.getenv('EMAIL_HOST_USER', 'admin@remdeskjobs.com')
                     email = EmailMessage(
-                        subject=f"New Resume: {application.full_name}",
-                        body=f"A new candidate applied.\n\nName: {application.full_name}\nRole: {application.primary_skill}\nExperience: {application.experience_years} years\n\nSee attachment for resume.",
-                        from_email=None, # Uses default from settings
+                        subject=f"New Resume: {form.cleaned_data['full_name']}",
+                        body=f"A new candidate applied.\n\nName: {form.cleaned_data['full_name']}\nRole: {form.cleaned_data['primary_skill']}\nExperience: {form.cleaned_data['experience_years']} years\n\nSee attachment for resume.",
+                        from_email=None,
                         to=[admin_email], 
                     )
-                    # Read file content for attachment
                     email.attach(uploaded_file.name, uploaded_file.read(), uploaded_file.content_type)
                     email.send()
+                    # Reset file cursor so Cloudinary can re-read and upload it
+                    uploaded_file.seek(0)
                 except Exception as e:
                     print(f"Resume email failed: {e}")
-                    # We don't error out the user, we accept the text application at least.
+                    uploaded_file.seek(0)
+            
+            # Cloudinary handles file storage — no filesystem workaround needed
+            form.save()
             
             messages.success(request, 'Application submitted! We will be in touch.')
             return redirect('careers')

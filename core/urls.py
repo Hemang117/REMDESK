@@ -15,6 +15,10 @@ urlpatterns = [
     path('login/', views.login_page, name='login'),
     path('signup/', views.signup_page, name='signup'),
     
+    # Profile
+    path('profile/', views.profile_dashboard, name='profile_dashboard'),
+    path('profile/edit/', views.profile_edit, name='profile_edit'),
+    
     # Renamed/Deprecated
     path('employers/', views.index, name='employers'), # Redirect to home for now, or keep if specific page needed
 ]

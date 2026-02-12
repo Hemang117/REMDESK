@@ -54,6 +54,10 @@ INSTALLED_APPS = [
 
     'core',
     'talenthub',
+
+    # Cloud Storage for file uploads (resumes)
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -189,6 +193,16 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Cloudinary: Cloud storage for file uploads (resumes, docs)
+# Credentials come from env vars — get them at https://console.cloudinary.com
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+    'SECURE': True,  # Force HTTPS
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+
 # Email Backend Configuration
 if DEBUG:
     # Use console backend for development output
@@ -244,7 +258,8 @@ CSP_BASE_URI = ["'self'"]
 CSP_CONNECT_SRC = [
     "'self'", 
     "https://*.vercel-insights.com",
-    "https://*.vercel-analytics.com"
+    "https://*.vercel-analytics.com",
+    "https://res.cloudinary.com",
 ]
 
 # Fonts: Allow self, Google Fonts data

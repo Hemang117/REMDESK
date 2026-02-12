@@ -1,4 +1,39 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    phone_number = models.CharField(max_length=20, blank=True)
+    skills = models.TextField(blank=True, help_text="Comma-separated skills (e.g. Python, React, AWS)")
+    experience_years = models.PositiveIntegerField(default=0)
+    current_role = models.CharField(max_length=100, blank=True)
+    resume = models.FileField(upload_to='user_resumes/', blank=True, null=True)
+    portfolio_url = models.URLField(blank=True)
+    linkedin_url = models.URLField(blank=True)
+    is_looking_for_job = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def skills_list(self):
+        """Returns a list of skills, split by comma."""
+        if not self.skills:
+            return []
+        return [skill.strip() for skill in self.skills.split(',') if skill.strip()]
+
+    def __str__(self):
+        return f"Profile of {self.user.username}"
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 class ContactMessage(models.Model):
     name = models.CharField(max_length=255)

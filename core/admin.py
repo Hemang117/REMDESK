@@ -1,7 +1,13 @@
 import csv
 from django.http import HttpResponse
 from django.contrib import admin
-from .models import RoleCategory, Service, Testimonial, TeamMember, Lead, CandidateApplication, ContactMessage
+from .models import RoleCategory, Service, Testimonial, TeamMember, Lead, CandidateApplication, ContactMessage, UserProfile
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone_number', 'current_role', 'is_looking_for_job')
+    search_fields = ('user__username', 'user__email', 'phone_number')
+    list_filter = ('is_looking_for_job',)
 
 def export_to_csv(modeladmin, request, queryset):
     opts = modeladmin.model._meta
