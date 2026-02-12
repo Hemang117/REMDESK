@@ -35,25 +35,19 @@ def profile_dashboard(request):
 def profile_edit(request):
     profile = request.user.profile
     
-    # QA Check / Rate Limiting: 2-Hour Cooldown
-    # Allow updates only if 2 hours passed since last update
-    # Exception: If the profile is brand new (created within last 5 mins), allow corrections.
-    from django.utils import timezone
-    from datetime import timedelta
-    
-    now = timezone.now()
-    two_hours_ago = now - timedelta(hours=2)
-    five_mins_ago = now - timedelta(minutes=5)
-    
-    # If updated recently AND it wasn't just created (grace period), block update.
-    # Note: user.is_superuser can bypass.
-    if request.method == 'POST' and not request.user.is_superuser:
-        if profile.updated_at > two_hours_ago and profile.created_at < five_mins_ago:
-            # Calculate remaining time
-            next_update = profile.updated_at + timedelta(hours=2)
-            remaining_minutes = int((next_update - now).total_seconds() / 60)
-            messages.error(request, f"You can only update your profile once every 2 hours. Please try again in {remaining_minutes} minutes.")
-            return redirect('profile_dashboard')
+    # ── Rate Limiting (DISABLED — uncomment to re-enable) ──────────────
+    # from django.utils import timezone
+    # from datetime import timedelta
+    # now = timezone.now()
+    # two_hours_ago = now - timedelta(hours=2)
+    # five_mins_ago = now - timedelta(minutes=5)
+    # if request.method == 'POST' and not request.user.is_superuser:
+    #     if profile.updated_at > two_hours_ago and profile.created_at < five_mins_ago:
+    #         next_update = profile.updated_at + timedelta(hours=2)
+    #         remaining_minutes = int((next_update - now).total_seconds() / 60)
+    #         messages.error(request, f"You can only update your profile once every 2 hours. Please try again in {remaining_minutes} minutes.")
+    #         return redirect('profile_dashboard')
+    # ─────────────────────────────────────────────────────────────────────
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
