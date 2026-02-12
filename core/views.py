@@ -171,15 +171,36 @@ def about(request):
 
 def contact(request):
     if request.method == 'POST':
-        # Check if it's the contact form or lead form (if you reuse this view)
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
+            contact_msg = form.save()
+            
+            # Email notification to admin
+            from django.core.mail import EmailMessage
+            import os
+            try:
+                admin_email = os.getenv('EMAIL_HOST_USER', 'admin@remdeskjobs.com')
+                email = EmailMessage(
+                    subject=f"📩 New Contact Message from {contact_msg.name}",
+                    body=(
+                        f"New contact form submission:\n\n"
+                        f"Name: {contact_msg.name}\n"
+                        f"Email: {contact_msg.email}\n\n"
+                        f"Message:\n{contact_msg.message}\n\n"
+                        f"Submitted: {contact_msg.created_at}\n"
+                        f"---\nReply directly to: {contact_msg.email}"
+                    ),
+                    from_email=None,
+                    to=[admin_email],
+                    reply_to=[contact_msg.email],
+                )
+                email.send()
+            except Exception as e:
+                print(f"Contact email notification failed: {e}")
+            
             messages.success(request, 'Message sent! We will translate this into action shortly.')
             return redirect('contact')
     else:
-        # Default to LeadForm since the page acts as "Share Requirements" mostly
-        # If you need both, you might need two separate forms in context or a toggle
         form = LeadForm()
     
     return render(request, 'core/contact.html', {'form': form})
@@ -188,14 +209,39 @@ def submit_lead(request):
     if request.method == 'POST':
         form = LeadForm(request.POST)
         if form.is_valid():
-            form.save()
+            lead = form.save()
+            
+            # Email notification to admin
+            from django.core.mail import EmailMessage
+            import os
+            try:
+                admin_email = os.getenv('EMAIL_HOST_USER', 'admin@remdeskjobs.com')
+                email = EmailMessage(
+                    subject=f"🏢 New Hiring Lead: {lead.company_name}",
+                    body=(
+                        f"New employer lead received!\n\n"
+                        f"Contact: {lead.name}\n"
+                        f"Company: {lead.company_name}\n"
+                        f"Email: {lead.email}\n\n"
+                        f"Role Requirements:\n{lead.role_requirements}\n\n"
+                        f"Budget: {lead.get_budget_range_display() or 'Not specified'}\n"
+                        f"Timeline: {lead.get_timeline_display() or 'Not specified'}\n\n"
+                        f"Submitted: {lead.created_at}\n"
+                        f"---\nReply directly to: {lead.email}"
+                    ),
+                    from_email=None,
+                    to=[admin_email],
+                    reply_to=[lead.email],
+                )
+                email.send()
+            except Exception as e:
+                print(f"Lead email notification failed: {e}")
+            
             messages.success(request, 'Requirement details received! Our talent specialists will contact you within 24 hours.')
-            # Redirect to where they came from or a thank you page
             next_url = request.POST.get('next', 'index')
             return redirect(next_url)
         else:
             messages.error(request, 'Please correct the errors in the form.')
-            # ideally re-render the page with errors, but for now redirecting back
             return redirect(request.META.get('HTTP_REFERER', 'index'))
     return redirect('index')
 
