@@ -33,6 +33,20 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') + ['.vercel.app', 'now.sh', 'remdeskjobs.com', 'www.remdeskjobs.com']
 
+# Vercel/Production Proxy Settings (CRITICAL for OAuth)
+# ----------------------------------------------------------------
+# Trust the "X-Forwarded-Proto" header coming from Vercel's load balancer.
+# Without this, Django thinks requests are HTTP, and secure cookies (OAuth state) are dropped.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+
 
 # Application definition
 
