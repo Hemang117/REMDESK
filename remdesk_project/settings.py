@@ -33,20 +33,6 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') + ['.vercel.app', 'now.sh', 'remdeskjobs.com', 'www.remdeskjobs.com']
 
-# Vercel/Production Proxy Settings (CRITICAL for OAuth)
-# ----------------------------------------------------------------
-# Trust the "X-Forwarded-Proto" header coming from Vercel's load balancer.
-# Without this, Django thinks requests are HTTP, and secure cookies (OAuth state) are dropped.
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = True
-USE_X_FORWARDED_PORT = True
-
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
-
 
 # Application definition
 
@@ -56,8 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    # Cloudinary storage (Must be before staticfiles)
-    'cloudinary_storage',
     'django.contrib.staticfiles',
     'django.contrib.sites',  # Required for allauth
     
@@ -72,7 +56,7 @@ INSTALLED_APPS = [
     'talenthub',
 
     # Cloud Storage for file uploads (resumes)
-    # 'cloudinary_storage' moved to top
+    'cloudinary_storage',
     'cloudinary',
 ]
 
@@ -85,7 +69,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # CurrentSiteMiddleware removed - causing 500s. Rely on SITE_ID=1
     "allauth.account.middleware.AccountMiddleware",
     "csp.middleware.CSPMiddleware",
     # Safe Caching: Prevent HTML caching so Nonce is always fresh
@@ -107,9 +90,10 @@ ACCOUNT_EMAIL_VERIFICATION = 'none' # For development simplicity
 # Provider Config (Placeholders)
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-         'APP': {
+        'APP': {
             'client_id': os.getenv('GOOGLE_CLIENT_ID'),
             'secret': os.getenv('GOOGLE_CLIENT_SECRET'),
+            'key': ''
         },
         'SCOPE': [
             'profile',
