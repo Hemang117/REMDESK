@@ -83,6 +83,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware', # Required for allauth site resolution
     "allauth.account.middleware.AccountMiddleware",
     "csp.middleware.CSPMiddleware",
     # Safe Caching: Prevent HTML caching so Nonce is always fresh
@@ -104,11 +105,6 @@ ACCOUNT_EMAIL_VERIFICATION = 'none' # For development simplicity
 # Provider Config (Placeholders)
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        'APP': {
-            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
-            'secret': os.getenv('GOOGLE_CLIENT_SECRET'),
-            'key': ''
-        },
         'SCOPE': [
             'profile',
             'email',
